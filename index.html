@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#173c35">
-<title>MANILA 2026｜Eva × 朋友</title>
+<title>MANILA 2026｜Eva × Tina｜雙人自由行</title>
 <style>
 :root{--green:#173c35;--cream:#f7f2e8;--sand:#e8dcc7;--orange:#d77a45;--ink:#26332f;--muted:#77827d;--white:#fff}
 *{box-sizing:border-box} body{margin:0;background:#e9e5dc;color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans TC","PingFang TC",sans-serif}
@@ -28,7 +28,7 @@ footer{text-align:center;padding:30px 20px 45px;color:var(--muted);font-size:12p
 <header class="hero">
 <div class="kicker">MANILA · PHILIPPINES · 2026</div>
 <h1>MANILA 2026 🇵🇭</h1>
-<p>Eva × 朋友｜雙人自由行</p>
+<p>Eva × Tina｜雙人自由行</p>
 <div class="info">
 <div><b>10/07 — 10/11</b><span>5 DAYS · 4 NIGHTS</span></div>
 <div><b>👭 2 PEOPLE</b><span>FREE & EASY TRIP</span></div>
@@ -82,7 +82,16 @@ footer{text-align:center;padding:30px 20px 45px;color:var(--muted);font-size:12p
 <div class="mini"><b>🚗 交通</b><span>₱ ______</span></div><div class="mini"><b>🍴 美食</b><span>₱ ______</span></div>
 <div class="mini"><b>🛍️ 購物</b><span>₱ ______</span></div><div class="mini"><b>💆 按摩</b><span>₱ ______</span></div>
 </div>
-<div class="card"><b>雙人總花費：₱ __________</b><br><small>回國後再補上實際金額</small></div>
+<div class="card">
+<b>雙人總花費：₱ <span id="total">0</span></b><br>
+<small>輸入各項支出後會自動加總</small>
+<div class="grid" style="margin-top:12px">
+<input id="flight" type="number" placeholder="機票" oninput="calc()" style="padding:10px;border:1px solid #ddd;border-radius:10px">
+<input id="hotelcost" type="number" placeholder="住宿" oninput="calc()" style="padding:10px;border:1px solid #ddd;border-radius:10px">
+<input id="transport" type="number" placeholder="交通" oninput="calc()" style="padding:10px;border:1px solid #ddd;border-radius:10px">
+<input id="foodcost" type="number" placeholder="美食" oninput="calc()" style="padding:10px;border:1px solid #ddd;border-radius:10px">
+</div>
+</div>
 </section>
 
 <section id="prep">
@@ -96,7 +105,13 @@ footer{text-align:center;padding:30px 20px 45px;color:var(--muted);font-size:12p
 </div>
 </section>
 
-<footer>🇵🇭 LET'S GET LOST IN MANILA<br>Eva × 朋友 · 2026</footer>
+<footer>🇵🇭 LET'S GET LOST IN MANILA<br>Eva × Tina · 2026</footer>
 </div>
-</body>
+<script>
+function calc(){
+  const ids=['flight','hotelcost','transport','foodcost'];
+  const total=ids.reduce((s,id)=>s+(Number(document.getElementById(id).value)||0),0);
+  document.getElementById('total').textContent=total.toLocaleString();
+}
+</script></body>
 </html>
