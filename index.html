@@ -112,6 +112,32 @@ body{padding-bottom:82px}
  .hero-photo{min-height:286px}.hero h1{font-size:38px}.hero-name{font-size:20px}
  .dash-card{padding:13px;border-radius:16px}.forecast-row{gap:4px}
 }
+
+/* FINAL MOBILE BOTTOM NAV — fixed to viewport bottom */
+nav.bottom-nav{
+  position:fixed !important;
+  top:auto !important;
+  bottom:0 !important;
+  left:0 !important;
+  right:0 !important;
+  width:100% !important;
+  height:78px !important;
+  margin:0 !important;
+  transform:none !important;
+  z-index:99999 !important;
+  display:grid !important;
+  grid-template-columns:repeat(6,1fr) !important;
+  background:#fffdfb !important;
+  border:0 !important;
+  border-top:1px solid #e8dfd7 !important;
+  border-radius:22px 22px 0 0 !important;
+  box-shadow:0 -4px 18px rgba(0,0,0,.10) !important;
+  padding:6px 10px calc(6px + env(safe-area-inset-bottom)) !important;
+}
+@media (max-width:760px){
+  body{padding-bottom:96px !important;}
+  nav.bottom-nav{position:fixed !important;bottom:0 !important;top:auto !important;}
+}
 </style>
 </head>
 <body>
