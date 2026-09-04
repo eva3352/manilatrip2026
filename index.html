@@ -248,6 +248,9 @@ body:not(.home-view) #dashboard{display:none}
 .stop-edit{margin-top:8px;display:grid;gap:6px}
 .stop-edit input{width:100%;box-sizing:border-box;padding:9px;border:1px solid #ded3c9;border-radius:9px;background:#fffdfa;font:inherit;font-size:13px}
 .stop-edit textarea{width:100%;box-sizing:border-box;padding:9px;border:1px solid #ded3c9;border-radius:9px;background:#fffdfa;font:inherit;font-size:13px;min-height:70px}
+
+.add-stop-main{width:100%;padding:13px 14px !important;border:0;border-radius:13px;background:#b97863 !important;color:#fff !important;font-size:14px;font-weight:800;box-shadow:0 4px 12px rgba(185,120,99,.18)}
+.stop-actions button{cursor:pointer}
 </style>
 </head>
 <body>
@@ -397,80 +400,7 @@ function calc(){
   document.getElementById('total').textContent=total.toLocaleString();
 }
 </script>
-<script>
-const DEFAULT_DAYS = [
- {date:"第1天 · 10/07 週三",title:"✈️ 抵達馬尼拉｜馬卡蒂夜晚",body:"抵達 → Grab → 城市花園大酒店 入住 → Poblacion 晚餐 → Makati 夜晚散步"},
- {date:"第2天 · 10/08 週四",title:"🏛️ 老城散步｜歷史 × 美食",body:"09:00 Grab 前往 王城區 Intramuros\n09:30 王城區 Intramuros → 馬尼拉大教堂 → 聖地牙哥堡\n12:30 午餐\n14:00 聖奧古斯丁教堂\n15:30 黎剎公園 → 國家博物館\n18:00 岷倫洛 Chinatown 晚餐"},
- {date:"第3天 · 10/09 週五",title:"🛍️ 馬卡蒂 × BGC｜逛街日",body:"10:00 Greenbelt 早餐／逛街\n11:30 Ayala Museum\n14:00 BGC High Street\n15:00 街景＋咖啡\n17:00 SM Aura\n19:00 BGC 晚餐"},
- {date:"第4天 · 10/10 週六",title:"🌴 放鬆自由日｜自由安排",body:"A｜SM SM Mall of Asia＋Manila Bay\nB｜Makati 咖啡＋Greenbelt＋Glorietta\nC｜按摩＋下午茶＋最後一晚大餐"},
- {date:"第5天 · 10/11 週日",title:"✈️ 再見馬尼拉",body:"早餐 → 退房 → 最後採買 → Grab → 馬尼拉機場 → Z2132"}
-];
 
-let days = JSON.parse(localStorage.getItem("manila2026_days") || "null") || DEFAULT_DAYS.map(x=>({...x}));
-
-function esc(s){
- return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function saveDays(){localStorage.setItem("manila2026_days",JSON.stringify(days));}
-function renderDays(){
- const box=document.getElementById("daysList");
- if(!days.length){box.innerHTML='<div class="empty">目前沒有行程，按「新增一天」開始。</div>';return;}
- box.innerHTML=days.map((d,i)=>`
- <article class="itin-card" draggable="true" ondragstart="dragStart(event,${i})" ondragover="event.preventDefault()" ondrop="dropDay(event,${i})">
-   <div class="itin-head">
-    <div><div class="itin-date">${esc(d.date)}</div><h3 class="itin-title">${esc(d.title)}</h3></div>
-    <span class="tag">DAY ${String(i+1).padStart(2,'0')}</span>
-   </div>
-   <div class="itin-body">${esc(d.body)}</div>
-   <div class="editbar">
-    <button class="drag" title="拖曳卡片排序">↕ 拖曳排序</button>
-    <button onclick="editDay(${i})">✏️ 編輯</button>
-    <button onclick="moveDay(${i},-1)">↑</button>
-    <button onclick="moveDay(${i},1)">↓</button>
-    <button class="danger" onclick="deleteDay(${i})">🗑️ 刪除</button>
-   </div>
- </article>`).join("");
-}
-function addDay(){
- days.push({date:`DAY ${String(days.length+1).padStart(2,'0')}`,title:"🌴 新行程",body:"點「編輯」加入今天的時間、景點、餐廳與交通。"});
- saveDays();renderDays();
- setTimeout(()=>editDay(days.length-1),50);
-}
-function editDay(i){
- const d=days[i];
- const card=document.querySelectorAll(".itin-card")[i];
- card.querySelector(".itin-body").outerHTML=`<div class="itin-edit">
- <input id="editDate" value="${esc(d.date)}" placeholder="日期，例如 第1天 · 10/07 週三">
- <input id="editTitle" value="${esc(d.title)}" placeholder="行程標題">
- <textarea id="editBody" placeholder="輸入時間軸與備註">${esc(d.body)}</textarea>
- <div class="editbar"><button class="primary" onclick="saveEdit(${i})">✓ 儲存</button><button onclick="renderDays()">取消</button></div>
- </div>`;
- card.querySelector(".editbar").remove();
-}
-function saveEdit(i){
- days[i]={date:document.getElementById("editDate").value.trim()||"未命名日期",title:document.getElementById("editTitle").value.trim()||"未命名行程",body:document.getElementById("editBody").value.trim()||""};
- saveDays();renderDays();
-}
-function deleteDay(i){
- if(confirm("確定要刪除這一天的行程嗎？")){days.splice(i,1);saveDays();renderDays();}
-}
-function moveDay(i,dir){
- const j=i+dir;if(j<0||j>=days.length)return;
- [days[i],days[j]]=[days[j],days[i]];saveDays();renderDays();
-}
-let dragIndex=null;
-function dragStart(e,i){dragIndex=i;e.dataTransfer.effectAllowed="move";}
-function dropDay(e,i){
- if(dragIndex===null||dragIndex===i)return;
- const item=days.splice(dragIndex,1)[0];days.splice(i,0,item);dragIndex=null;saveDays();renderDays();
-}
-function resetDays(){
- if(confirm("還原成預設的 5 天行程？目前自行修改的內容會被覆蓋。")){
-  days=DEFAULT_DAYS.map(x=>({...x}));saveDays();renderDays();
- }
-}
-renderDays();
-</script>
 
 <script>
 const DEFAULT_DAYS = [
@@ -524,7 +454,7 @@ function render(){
     <div class="stop-time">${esc(s[0])}</div><div class="stop-title">${esc(s[1])}</div><div class="stop-note">${esc(s[2]||"")}</div>
     <div class="stop-actions"><button onclick="editStop(${i})">✏️</button><button onclick="moveStop(${i},-1)">↑</button><button onclick="moveStop(${i},1)">↓</button><button onclick="deleteStop(${i})">🗑️</button><span>↕ 拖曳排序</span></div>
   </div>`).join("")}</div>
-  <div class="day-actions"><button class="primary" onclick="addStop()">＋ 新增行程</button><button onclick="editDay()">✏️ 編輯本日</button><button onclick="moveDay(-1)">← 前一天</button><button onclick="moveDay(1)">下一天 →</button><button onclick="deleteDay()">🗑️ 刪除本日</button></div>
+  <div class="day-actions"><button class="primary add-stop-main" onclick="addStop()">＋ 新增一個行程</button><button onclick="editDay()">✏️ 編輯本日</button><button onclick="moveDay(-1)">← 前一天</button><button onclick="moveDay(1)">下一天 →</button><button onclick="deleteDay()">🗑️ 刪除本日</button></div>
  </article>`; }
 function showDay(i){active=i;save();render();window.scrollTo({top:document.getElementById("days").offsetTop-55,behavior:"smooth"});}
 function editDay(){
