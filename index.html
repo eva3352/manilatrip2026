@@ -177,6 +177,26 @@ body{background:#eeeae2;min-height:100vh}
  body{padding-bottom:0}
  .app{border-radius:0}
 }
+
+/* 導覽列與主要內容容器精準對齊 */
+nav.bottom-nav{
+  position:fixed !important;
+  top:auto !important;
+  bottom:0 !important;
+  z-index:99999 !important;
+  margin:0 !important;
+  transform:none !important;
+  box-sizing:border-box !important;
+}
+@media (max-width:760px){
+  nav.bottom-nav{
+    left:0 !important;
+    right:0 !important;
+    width:100% !important;
+    height:78px !important;
+    border-radius:20px 20px 0 0 !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -495,6 +515,28 @@ document.querySelectorAll(".bottom-nav a").forEach(a=>{
   a.classList.add("active");
  });
 });
+</script>
+
+<script>
+(function(){
+  function alignBottomNav(){
+    const app=document.querySelector('.app');
+    const nav=document.querySelector('.bottom-nav');
+    if(!app||!nav)return;
+    if(window.innerWidth<=760){
+      nav.style.left='0px';
+      nav.style.width='100%';
+      return;
+    }
+    const r=app.getBoundingClientRect();
+    nav.style.left=Math.round(r.left)+'px';
+    nav.style.width=Math.round(r.width)+'px';
+  }
+  window.addEventListener('resize',alignBottomNav);
+  window.addEventListener('load',alignBottomNav);
+  setTimeout(alignBottomNav,100);
+  setTimeout(alignBottomNav,500);
+})();
 </script>
 </body>
 </html>
