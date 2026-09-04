@@ -239,6 +239,15 @@ body:not(.home-view) #dashboard{display:none}
 .page-card{background:#fffdfa;border-radius:18px;padding:16px;margin:10px 0;box-shadow:0 5px 20px #4b392d0d}.page-label{font-size:9px;letter-spacing:1.6px;color:#b56f5a;font-weight:800}.page-card h3{margin:6px 0 8px}.page-card p{font-size:13px;line-height:1.7;color:#756b65}.todo{padding:11px 0;border-bottom:1px solid #eee6de;font-size:13px;color:#675f59}
 .map-list{display:grid;gap:10px}.map-item{display:grid;grid-template-columns:1fr auto;gap:2px 8px;text-decoration:none;color:#4b4540;background:#fffdfa;border-radius:15px;padding:15px;box-shadow:0 4px 15px #4b392d0b}.map-item b{grid-column:1}.map-item small{color:#9a8f87}.map-item span{grid-column:2;grid-row:1/3;align-self:center;color:#b56f5a;font-size:20px}
 .tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tool-grid button{border:0;text-align:left;background:#fffdfa;border-radius:16px;padding:16px;color:#4b4540;box-shadow:0 4px 15px #4b392d0b}.tool-grid b,.tool-grid small{display:block;margin-top:5px}.tool-grid small{color:#9a8f87;font-size:10px}.more-row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid #eee6de;font-size:13px}.more-row span{color:#8e8178}
+
+.stop-actions{display:flex;align-items:center;gap:5px;margin-top:7px}
+.stop-actions button{border:0;background:#f3ece5;color:#806c62;border-radius:8px;width:28px;height:27px;font-size:12px}
+.stop-actions span{font-size:9px;color:#b1a39a;margin-left:3px}
+.stop[draggable="true"]{cursor:grab}
+.stop[draggable="true"]:active{cursor:grabbing}
+.stop-edit{margin-top:8px;display:grid;gap:6px}
+.stop-edit input{width:100%;box-sizing:border-box;padding:9px;border:1px solid #ded3c9;border-radius:9px;background:#fffdfa;font:inherit;font-size:13px}
+.stop-edit textarea{width:100%;box-sizing:border-box;padding:9px;border:1px solid #ded3c9;border-radius:9px;background:#fffdfa;font:inherit;font-size:13px;min-height:70px}
 </style>
 </head>
 <body>
@@ -510,16 +519,13 @@ function render(){
  const d=days[active];
  document.getElementById("activeDay").innerHTML=`
  <article class="mobile-day">
-  <div class="big-date">${esc(d.date)}</div><h3>${esc(d.title)}</h3>
-  <div class="timeline">${d.stops.map((s,i)=>`<div class="stop"><div class="stop-time">${esc(s[0])}</div><div class="stop-title">${esc(s[1])}</div><div class="stop-note">${esc(s[2]||"")}</div></div>`).join("")}</div>
-  <div class="day-actions">
-   <button class="primary" onclick="editDay()">✏️ 編輯本日</button>
-   <button onclick="addStop()">＋ 新增行程</button>
-   <button onclick="moveDay(-1)">← 前一天</button><button onclick="moveDay(1)">下一天 →</button>
-   <button onclick="deleteDay()">🗑️ 刪除本日</button>
-  </div>
- </article>`;
-}
+  <div class="big-date">${esc(d.date)}</div><h3 class="itin-title">${esc(d.title)}</h3>
+  <div class="timeline">${d.stops.map((s,i)=>`<div class="stop" draggable="true" ondragstart="dragStopStart(event,${i})" ondragover="event.preventDefault()" ondrop="dropStop(event,${i})">
+    <div class="stop-time">${esc(s[0])}</div><div class="stop-title">${esc(s[1])}</div><div class="stop-note">${esc(s[2]||"")}</div>
+    <div class="stop-actions"><button onclick="editStop(${i})">✏️</button><button onclick="moveStop(${i},-1)">↑</button><button onclick="moveStop(${i},1)">↓</button><button onclick="deleteStop(${i})">🗑️</button><span>↕ 拖曳排序</span></div>
+  </div>`).join("")}</div>
+  <div class="day-actions"><button class="primary" onclick="addStop()">＋ 新增行程</button><button onclick="editDay()">✏️ 編輯本日</button><button onclick="moveDay(-1)">← 前一天</button><button onclick="moveDay(1)">下一天 →</button><button onclick="deleteDay()">🗑️ 刪除本日</button></div>
+ </article>`; }
 function showDay(i){active=i;save();render();window.scrollTo({top:document.getElementById("days").offsetTop-55,behavior:"smooth"});}
 function editDay(){
  const d=days[active], box=document.getElementById("activeDay");
@@ -586,6 +592,56 @@ function showTool(type){
   if(type==="prep") box.innerHTML='<div class="page-card"><h3>🧳 行前清單</h3><div class="todo">☐ 護照</div><div class="todo">☐ 機票</div><div class="todo">☐ eSIM</div><div class="todo">☐ Grab</div><div class="todo">☐ 旅平險</div></div>';
   if(type==="hotel") box.innerHTML='<div class="page-card"><h3>🏨 城市花園大酒店</h3><p>8008 Makati Ave, Kalayaan Ave, Makati, Philippines</p><a class="mapbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=City+Garden+Grand+Hotel+Makati">📍 開啟地圖</a></div>';
   if(type==="food") box.innerHTML='<div class="page-card"><h3>🍴 美食清單</h3><p>之後把選定的餐廳、必點料理與 Google Maps 放進這裡。</p></div>';
+}
+</script>
+
+<script>
+let dragStopIndex=null;
+function addStop(){
+  days[active].stops.push(["時間","新行程","點擊編輯後輸入內容"]);
+  save(); render();
+  setTimeout(()=>editStop(days[active].stops.length-1),40);
+}
+function editStop(i){
+  const s=days[active].stops[i];
+  const el=document.querySelectorAll("#activeDay .stop")[i];
+  el.innerHTML=`<div class="stop-edit">
+    <input id="stopTime" value="${esc(s[0])}" placeholder="時間">
+    <input id="stopTitle" value="${esc(s[1])}" placeholder="地點／行程">
+    <textarea id="stopNote" placeholder="備註">${esc(s[2]||"")}</textarea>
+    <div class="day-actions"><button class="primary" onclick="saveStop(${i})">✓ 儲存</button><button onclick="render()">取消</button></div>
+  </div>`;
+}
+function saveStop(i){
+  days[active].stops[i]=[
+    document.getElementById("stopTime").value.trim(),
+    document.getElementById("stopTitle").value.trim(),
+    document.getElementById("stopNote").value.trim()
+  ];
+  save();render();
+}
+function deleteStop(i){
+  if(confirm("確定刪除這個行程嗎？")){
+    days[active].stops.splice(i,1);save();render();
+  }
+}
+function moveStop(i,dir){
+  const j=i+dir;
+  if(j<0||j>=days[active].stops.length)return;
+  [days[active].stops[i],days[active].stops[j]]=[days[active].stops[j],days[active].stops[i]];
+  save();render();
+}
+function dragStopStart(e,i){
+  dragStopIndex=i;
+  e.dataTransfer.effectAllowed="move";
+}
+function dropStop(e,i){
+  e.preventDefault();
+  if(dragStopIndex===null||dragStopIndex===i)return;
+  const arr=days[active].stops;
+  const item=arr.splice(dragStopIndex,1)[0];
+  arr.splice(i,0,item);
+  dragStopIndex=null;save();render();
 }
 </script>
 </body>
