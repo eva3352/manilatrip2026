@@ -229,6 +229,16 @@ nav.bottom-nav{
     border-radius:20px 20px 0 0 !important;
   }
 }
+
+.app-page{display:none;padding:18px 18px 110px}
+.app-page.active{display:block}
+body.home-view #dashboard{display:block}
+body.home-view .app-page{display:none}
+body:not(.home-view) #dashboard{display:none}
+.page-title{padding:8px 4px 14px}.page-title span{font-size:9px;letter-spacing:2px;color:#b56f5a;font-weight:800}.page-title h2{font-size:27px;margin:5px 0 3px;color:#4b4540}.page-title p{font-size:11px;color:#9a8f87;margin:0}
+.page-card{background:#fffdfa;border-radius:18px;padding:16px;margin:10px 0;box-shadow:0 5px 20px #4b392d0d}.page-label{font-size:9px;letter-spacing:1.6px;color:#b56f5a;font-weight:800}.page-card h3{margin:6px 0 8px}.page-card p{font-size:13px;line-height:1.7;color:#756b65}.todo{padding:11px 0;border-bottom:1px solid #eee6de;font-size:13px;color:#675f59}
+.map-list{display:grid;gap:10px}.map-item{display:grid;grid-template-columns:1fr auto;gap:2px 8px;text-decoration:none;color:#4b4540;background:#fffdfa;border-radius:15px;padding:15px;box-shadow:0 4px 15px #4b392d0b}.map-item b{grid-column:1}.map-item small{color:#9a8f87}.map-item span{grid-column:2;grid-row:1/3;align-self:center;color:#b56f5a;font-size:20px}
+.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tool-grid button{border:0;text-align:left;background:#fffdfa;border-radius:16px;padding:16px;color:#4b4540;box-shadow:0 4px 15px #4b392d0b}.tool-grid b,.tool-grid small{display:block;margin-top:5px}.tool-grid small{color:#9a8f87;font-size:10px}.more-row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid #eee6de;font-size:13px}.more-row span{color:#8e8178}
 </style>
 </head>
 <body>
@@ -250,11 +260,11 @@ nav.bottom-nav{
 </header>
 <nav class="bottom-nav" aria-label="主要導覽">
 <a class="active" href="#home"><span class="nav-icon">⌂</span><b>首頁</b></a>
-<a href="#today" onclick="goToday(event)"><span class="nav-icon">◎</span><b>今日</b></a>
-<a href="#days"><span class="nav-icon">▣</span><b>行程</b></a>
-<a href="#map"><span class="nav-icon">⌖</span><b>地圖</b></a>
-<a href="#tools"><span class="nav-icon">☰</span><b>工具</b></a>
-<a href="#more"><span class="nav-icon">•••</span><b>更多</b></a>
+<a href="#page-today" onclick="goToday(event)"><span class="nav-icon">◎</span><b>今日</b></a>
+<a href="#page-itinerary"><span class="nav-icon">▣</span><b>行程</b></a>
+<a href="#page-map"><span class="nav-icon">⌖</span><b>地圖</b></a>
+<a href="#page-tools"><span class="nav-icon">☰</span><b>工具</b></a>
+<a href="#page-more"><span class="nav-icon">•••</span><b>更多</b></a>
 </nav>
 
 <section id="dashboard">
@@ -284,93 +294,89 @@ nav.bottom-nav{
 <div class="dash-card hotel-home">
   <div class="dash-label">HOTEL</div><h3>住宿資訊</h3>
   <div class="hotel-inner"><b>城市花園大酒店</b><small>City Garden GRAND Hotel</small><span>8008 Makati Ave, Kalayaan Ave, Makati</span>
-  <div class="mini-actions"><a href="https://www.google.com/maps/search/?api=1&query=City+Garden+Grand+Hotel+Makati" target="_blank">Google Maps</a><a href="#days">查看行程</a></div></div>
+  <div class="mini-actions"><a href="https://www.google.com/maps/search/?api=1&query=City+Garden+Grand+Hotel+Makati" target="_blank">Google Maps</a><a href="#page-itinerary">查看行程</a></div></div>
 </div>
 
 <div class="dash-card quick">
   <div class="dash-label">QUICK ACCESS</div><h3>快速入口</h3>
-  <div class="quick-grid"><a href="#days">查看每日行程</a><a href="#today">今日快速模式</a><a href="#hotel">飯店導航</a><a href="#prep">出發前準備</a></div>
+  <div class="quick-grid"><a href="#page-itinerary">查看每日行程</a><a href="#page-today">今日快速模式</a><a href="#page-tools">飯店導航</a><a href="#page-tools">出發前準備</a></div>
 </div>
 </section>
 
-<section id="days">
-<div class="title"><h2>我的行程 📅</h2><small>每日行程</small></div>
-<div class="day-tabs" id="dayTabs"></div>
-<div id="activeDay"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="app-page" id="page-today">
+  <div class="page-title"><span>今日</span><h2>今天去哪裡？</h2><p>依照旅程進度，快速查看今天要做的事</p></div>
+  <div class="page-card">
+    <div class="page-label">NEXT TRIP</div>
+    <h3>📌 10/07｜抵達馬尼拉</h3>
+    <p>抵達機場 → 前往城市花園大酒店 → 放行李 → Poblacion 晚餐</p>
+  </div>
+  <div class="page-card">
+    <div class="page-label">出發前提醒</div>
+    <div class="todo">☐ 護照與機票</div>
+    <div class="todo">☐ eSIM／網路</div>
+    <div class="todo">☐ Grab</div>
+    <div class="todo">☐ 菲律賓披索</div>
+  </div>
 </section>
 
-
-
-
-
-
-
-
-
-<section id="spots">
-<div class="title"><h2>景點 📍</h2><small>景點快速入口</small></div>
-<div class="grid">
-<div class="mini"><b>🏰 王城區 Intramuros</b><span>馬尼拉歷史城區</span><br><a class="mapbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=王城區 Intramuros+Manila">地圖</a></div>
-<div class="mini"><b>🏯 聖地牙哥堡</b><span>古堡＋Jose Rizal 紀念</span><br><a class="mapbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Fort+Santiago+Manila">地圖</a></div>
-<div class="mini"><b>⛪ 聖奧古斯丁教堂</b><span>王城區 Intramuros 歷史教堂</span><br><a class="mapbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=San+Agustin+Church+王城區 Intramuros">地圖</a></div>
-<div class="mini"><b>🎨 國家博物館</b><span>藝術與文化</span><br><a class="mapbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=National+Museum+of+Fine+Arts+Manila">地圖</a></div>
-</div>
+<section class="app-page" id="page-itinerary">
+  <div class="page-title"><span>行程</span><h2>5天4夜</h2><p>每一天獨立查看、編輯與排序</p></div>
+  <div class="day-tabs" id="dayTabs"></div>
+  <div id="activeDay"></div>
 </section>
 
-<section id="hotel">
-<div class="title"><h2>住宿</h2><small>住宿</small></div>
-<div class="card"><h3>🏨 城市花園大酒店</h3><p>8008 Makati Ave, Kalayaan Ave, Makati, Philippines</p><a class="mapbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=City+Garden+Grand+Hotel+Makati">📍 開啟 Google 地圖</a></div>
+<section class="app-page" id="page-map">
+  <div class="page-title"><span>地圖</span><h2>旅行地圖</h2><p>常用地點一點就能導航</p></div>
+  <div class="map-list">
+    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=City+Garden+Grand+Hotel+Makati"><b>🏨 城市花園大酒店</b><small>住宿</small><span>→</span></a>
+    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Intramuros+Manila"><b>🏛️ 王城區 Intramuros</b><small>第2天</small><span>→</span></a>
+    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Bonifacio+High+Street+Taguig"><b>🛍️ BGC High Street</b><small>第3天</small><span>→</span></a>
+    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=SM+Mall+of+Asia"><b>🌴 SM Mall of Asia</b><small>第4天備選</small><span>→</span></a>
+  </div>
 </section>
 
-<section id="food">
-<div class="title"><h2>必吃美食 🍴</h2><small>慢慢吃、慢慢選</small></div>
-<div class="grid">
-<div class="mini"><b>🥘 Filipino</b><span>Adobo · Sinigang · Sisig</span></div>
-<div class="mini"><b>🍧 Dessert</b><span>Halo-Halo</span></div>
-<div class="mini"><b>🥢 岷倫洛 Chinatown</b><span>中華美食＋街頭小吃</span></div>
-<div class="mini"><b>☕ Cafe</b><span>Makati / BGC 咖啡廳</span></div>
-</div>
+<section class="app-page" id="page-tools">
+  <div class="page-title"><span>工具</span><h2>旅行工具</h2><p>旅途中會用到的都放這裡</p></div>
+  <div class="tool-grid">
+    <button onclick="showTool('budget')">💰<b>雙人記帳</b><small>記錄共同支出</small></button>
+    <button onclick="showTool('prep')">🧳<b>行前清單</b><small>出發前逐項確認</small></button>
+    <button onclick="showTool('hotel')">🏨<b>住宿資訊</b><small>地址與地圖</small></button>
+    <button onclick="showTool('food')">🍴<b>美食清單</b><small>之後慢慢加入</small></button>
+  </div>
+  <div id="toolContent"></div>
 </section>
 
-<section id="shop">
-<div class="title"><h2>購物清單 🛍️</h2><small>想買就勾起來</small></div>
-<div class="card">
-<label class="check"><input type="checkbox"> 菲律賓零食／伴手禮</label>
-<label class="check"><input type="checkbox"> 咖啡</label>
-<label class="check"><input type="checkbox"> Beauty Products</label>
-<label class="check"><input type="checkbox"> SM 購物</label>
-<label class="check"><input type="checkbox"> 個人戰利品</label>
-</div>
-</section>
-
-<section id="budget">
-<div class="title"><h2>兩個人的旅行帳本 💰</h2><small>兩個人的旅行帳本</small></div>
-<div class="grid">
-<div class="mini"><b>✈️ 機票</b><span>₱ ______</span></div><div class="mini"><b>🏨 住宿</b><span>₱ ______</span></div>
-<div class="mini"><b>🚗 交通</b><span>₱ ______</span></div><div class="mini"><b>🍴 美食</b><span>₱ ______</span></div>
-<div class="mini"><b>🛍️ 購物</b><span>₱ ______</span></div><div class="mini"><b>💆 按摩</b><span>₱ ______</span></div>
-</div>
-<div class="card">
-<b>雙人總花費：₱ <span id="total">0</span></b><br>
-<small>輸入各項支出後會自動加總</small>
-<div class="grid" style="margin-top:12px">
-<input id="flight" type="number" placeholder="機票" oninput="calc()" style="padding:10px;border:1px solid #ddd;border-radius:10px">
-<input id="hotelcost" type="number" placeholder="住宿" oninput="calc()" style="padding:10px;border:1px solid #ddd;border-radius:10px">
-<input id="transport" type="number" placeholder="交通" oninput="calc()" style="padding:10px;border:1px solid #ddd;border-radius:10px">
-<input id="foodcost" type="number" placeholder="美食" oninput="calc()" style="padding:10px;border:1px solid #ddd;border-radius:10px">
-</div>
-</div>
-</section>
-
-<section id="prep">
-<div class="title"><h2>出發前準備 ✈️</h2><small>出發前 Check</small></div>
-<div class="card">
-<label class="check"><input type="checkbox"> 護照</label><label class="check"><input type="checkbox"> 去回程機票</label>
-<label class="check"><input type="checkbox"> 飯店訂單</label><label class="check"><input type="checkbox"> eSIM／網路</label>
-<label class="check"><input type="checkbox"> Grab</label><label class="check"><input type="checkbox"> 菲律賓披索</label>
-<label class="check"><input type="checkbox"> 信用卡／現金</label><label class="check"><input type="checkbox"> 行動電源</label>
-<label class="check"><input type="checkbox"> 防曬／雨具</label><label class="check"><input type="checkbox"> 旅平險</label>
-</div>
+<section class="app-page" id="page-more">
+  <div class="page-title"><span>更多</span><h2>旅行小幫手</h2><p>把旅途中重要資訊收好</p></div>
+  <div class="page-card">
+    <div class="more-row"><b>✈️ 航班</b><span>Z2133／Z2132</span></div>
+    <div class="more-row"><b>🏨 住宿</b><span>城市花園大酒店</span></div>
+    <div class="more-row"><b>📅 日期</b><span>2026.10.07 — 10.11</span></div>
+    <div class="more-row"><b>👭 同行</b><span>Eva × Tina</span></div>
+  </div>
 </section>
 
 <footer>🇵🇭 一起去馬尼拉散散步<br>Eva × Tina · 馬尼拉 2026</footer>
@@ -550,5 +556,37 @@ document.querySelectorAll(".bottom-nav a").forEach(a=>{
 </script>
 
 
+
+<script>
+document.body.classList.add("home-view");
+const pages = {
+  home:"home", today:"page-today", itinerary:"page-itinerary",
+  map:"page-map", tools:"page-tools", more:"page-more"
+};
+function showPage(name){
+  document.body.classList.toggle("home-view", name==="home");
+  document.querySelectorAll(".app-page").forEach(p=>p.classList.remove("active"));
+  if(name!=="home"){
+    const el=document.getElementById(pages[name]); if(el) el.classList.add("active");
+  }
+  document.querySelectorAll(".bottom-nav a").forEach(a=>a.classList.remove("active"));
+  const link=document.querySelector('.bottom-nav a[data-page="'+name+'"]');
+  if(link) link.classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(name==="itinerary" && typeof render==="function") render();
+}
+document.querySelectorAll(".bottom-nav a").forEach((a,i)=>{
+  const names=["home","today","itinerary","map","tools","more"];
+  a.dataset.page=names[i];
+  a.addEventListener("click",e=>{e.preventDefault();showPage(names[i]);});
+});
+function showTool(type){
+  const box=document.getElementById("toolContent");
+  if(type==="budget") box.innerHTML='<div class="page-card"><h3>💰 雙人記帳</h3><p>之後可以在這裡輸入 Eva 與 Tina 各自付款的金額，自動計算最後誰補給誰。</p></div>';
+  if(type==="prep") box.innerHTML='<div class="page-card"><h3>🧳 行前清單</h3><div class="todo">☐ 護照</div><div class="todo">☐ 機票</div><div class="todo">☐ eSIM</div><div class="todo">☐ Grab</div><div class="todo">☐ 旅平險</div></div>';
+  if(type==="hotel") box.innerHTML='<div class="page-card"><h3>🏨 城市花園大酒店</h3><p>8008 Makati Ave, Kalayaan Ave, Makati, Philippines</p><a class="mapbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=City+Garden+Grand+Hotel+Makati">📍 開啟地圖</a></div>';
+  if(type==="food") box.innerHTML='<div class="page-card"><h3>🍴 美食清單</h3><p>之後把選定的餐廳、必點料理與 Google Maps 放進這裡。</p></div>';
+}
+</script>
 </body>
 </html>
