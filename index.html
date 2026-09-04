@@ -138,6 +138,45 @@ nav.bottom-nav{
   body{padding-bottom:96px !important;}
   nav.bottom-nav{position:fixed !important;bottom:0 !important;top:auto !important;}
 }
+
+/* Final visual polish */
+html{scroll-behavior:smooth}
+body{background:#eeeae2;min-height:100vh}
+.app{width:100%;max-width:760px;margin:0 auto;background:#f7f3ed;min-height:100vh;overflow:hidden}
+.hero-photo{min-height:300px}
+#dashboard{padding:18px 16px 24px}
+.dash-grid{gap:10px}
+.dash-card{border:1px solid #eee5dc;box-shadow:0 4px 18px rgba(93,72,58,.07)}
+.dash-card h3{font-weight:750}
+.forecast{padding-bottom:14px}
+.forecast-row>div{min-height:82px;display:flex;flex-direction:column;justify-content:center}
+.hotel-home,.reminder,.quick{padding:15px}
+.bottom-nav{
+  position:fixed !important;
+  bottom:0 !important;
+  top:auto !important;
+  left:50% !important;
+  right:auto !important;
+  transform:translateX(-50%) !important;
+  width:min(100%,760px) !important;
+  max-width:760px !important;
+  height:76px !important;
+  border-radius:22px 22px 0 0 !important;
+  padding:6px 12px calc(6px + env(safe-area-inset-bottom)) !important;
+  background:rgba(255,253,251,.98) !important;
+  box-shadow:0 -5px 22px rgba(70,52,42,.12) !important;
+}
+.bottom-nav a{gap:3px;color:#8d837c!important}
+.bottom-nav a.active{color:#b56f5a!important}
+@media(max-width:760px){
+ body{background:#f7f3ed}
+ .app{max-width:none}
+ .bottom-nav{width:100%!important}
+}
+@media(min-width:761px){
+ body{padding-bottom:0}
+ .app{border-radius:0}
+}
 </style>
 </head>
 <body>
