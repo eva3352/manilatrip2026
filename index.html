@@ -197,6 +197,38 @@ nav.bottom-nav{
     border-radius:20px 20px 0 0 !important;
   }
 }
+
+/* 導覽列最終版：桌機與網站主體同寬、手機滿版固定底部 */
+:root{--site-width:860px}
+.app{width:100%;max-width:var(--site-width);margin:0 auto;background:var(--cream);min-height:100vh}
+nav.bottom-nav{
+  position:fixed !important;
+  top:auto !important;
+  bottom:0 !important;
+  left:50% !important;
+  right:auto !important;
+  width:min(var(--site-width),100vw) !important;
+  height:78px !important;
+  transform:translateX(-50%) !important;
+  margin:0 !important;
+  z-index:99999 !important;
+  box-sizing:border-box !important;
+  border-radius:22px 22px 0 0 !important;
+  background:#fffdfb !important;
+  border-top:1px solid #e8dfd7 !important;
+  box-shadow:0 -5px 20px rgba(70,55,45,.10) !important;
+}
+@media(max-width:760px){
+  :root{--site-width:100vw}
+  body{padding-bottom:92px !important}
+  .app{width:100%;max-width:none}
+  nav.bottom-nav{
+    left:0 !important;
+    width:100vw !important;
+    transform:none !important;
+    border-radius:20px 20px 0 0 !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -517,26 +549,6 @@ document.querySelectorAll(".bottom-nav a").forEach(a=>{
 });
 </script>
 
-<script>
-(function(){
-  function alignBottomNav(){
-    const app=document.querySelector('.app');
-    const nav=document.querySelector('.bottom-nav');
-    if(!app||!nav)return;
-    if(window.innerWidth<=760){
-      nav.style.left='0px';
-      nav.style.width='100%';
-      return;
-    }
-    const r=app.getBoundingClientRect();
-    nav.style.left=Math.round(r.left)+'px';
-    nav.style.width=Math.round(r.width)+'px';
-  }
-  window.addEventListener('resize',alignBottomNav);
-  window.addEventListener('load',alignBottomNav);
-  setTimeout(alignBottomNav,100);
-  setTimeout(alignBottomNav,500);
-})();
-</script>
+
 </body>
 </html>
