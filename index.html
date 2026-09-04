@@ -251,7 +251,10 @@ body:not(.home-view) #dashboard{display:none}
 
 .add-stop-main{width:100%;padding:13px 14px !important;border:0;border-radius:13px;background:#b97863 !important;color:#fff !important;font-size:14px;font-weight:800;box-shadow:0 4px 12px rgba(185,120,99,.18)}
 .stop-actions button{cursor:pointer}
+
+.sync-card input{width:100%;padding:11px 12px;border:1px solid #ddd6ca;border-radius:11px;font:inherit;background:#fffdf9;margin:4px 0}.auth-actions{display:flex;gap:8px;margin-top:8px}.sync-card button{border:0;border-radius:11px;padding:10px 13px;background:#eee8dc;color:var(--green);font-weight:700;cursor:pointer}.sync-card button.primary{background:var(--green);color:white}.sync-user{background:#f6f0ea;border-radius:11px;padding:11px;margin-bottom:8px;font-size:13px}.sync-home{margin-bottom:10px}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="app">
@@ -280,6 +283,7 @@ body:not(.home-view) #dashboard{display:none}
 </nav>
 
 <section id="dashboard">
+<div class="dash-card sync-home"><div class="dash-head"><div><div class="dash-label">CLOUD SYNC</div><h3 id="homeSyncTitle">尚未登入</h3></div><button onclick="showPage('more')">登入／同步</button></div><small id="homeSyncStatus">登入後可在兩台裝置同步行程</small></div>
 <div class="dash-grid">
   <div class="dash-card"><div class="dash-label">COUNTDOWN</div><h3>旅程中</h3><small>距離出發還有一點點期待</small></div>
   <div class="dash-card"><div class="dash-label">TODAY</div><h3>行前準備</h3><small>整理行李、確認資料</small></div>
@@ -383,6 +387,23 @@ body:not(.home-view) #dashboard{display:none}
 
 <section class="app-page" id="page-more">
   <div class="page-title"><span>更多</span><h2>旅行小幫手</h2><p>把旅途中重要資訊收好</p></div>
+  <div class="page-card sync-card">
+    <div class="page-label">☁️ CLOUD SYNC</div>
+    <h3 id="syncTitle">尚未登入</h3>
+    <p id="syncStatus">登入後，Eva 和 Tina 就能共用同一份行程。</p>
+    <div id="authForm">
+      <input id="authEmail" type="email" autocomplete="email" placeholder="Email">
+      <input id="authPassword" type="password" autocomplete="current-password" placeholder="密碼（至少 6 碼）">
+      <div class="auth-actions">
+        <button class="primary" onclick="loginAccount()">登入</button>
+        <button onclick="registerAccount()">註冊新帳號</button>
+      </div>
+    </div>
+    <div id="authUser" style="display:none">
+      <div class="sync-user" id="syncUserText"></div>
+      <button onclick="logoutAccount()">登出</button>
+    </div>
+  </div>
   <div class="page-card">
     <div class="more-row"><b>✈️ 航班</b><span>Z2133／Z2132</span></div>
     <div class="more-row"><b>🏨 住宿</b><span>城市花園大酒店</span></div>
@@ -403,78 +424,130 @@ function calc(){
 
 
 <script>
+const SUPABASE_URL = "https://hmldhemrlegizgbsfmvy.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_67RdvpfFfVuU2GEZ_CKTEw_5391deGd";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
 const DEFAULT_DAYS = [
 {date:"第1天 · 10/07 週三",title:"✈️ 抵達馬尼拉｜馬卡蒂夜晚",stops:[
 ["抵達","馬尼拉機場 → Grab → 城市花園大酒店","先入住、放行李"],
-["晚上","Poblacion","晚餐＋附近散步"]
-]},
+["晚上","Poblacion","晚餐＋附近散步"]]},
 {date:"第2天 · 10/08 週四",title:"🏛️ 老城散步｜歷史 × 美食",stops:[
-["09:00","前往 王城區 Intramuros","Grab"],
-["09:30","王城區 Intramuros → 馬尼拉大教堂 → 聖地牙哥堡","歷史街區＋拍照"],
-["12:30","午餐","找附近菲律賓料理"],
-["14:00","聖奧古斯丁教堂","歷史教堂"],
-["15:30","黎剎公園 → 國家博物館","文化行程"],
-["18:00","岷倫洛 Chinatown","晚餐＋夜逛"]
-]},
+["09:00","前往 王城區 Intramuros","Grab"],["09:30","王城區 Intramuros → 馬尼拉大教堂 → 聖地牙哥堡","歷史街區＋拍照"],["12:30","午餐","找附近菲律賓料理"],["14:00","聖奧古斯丁教堂","歷史教堂"],["15:30","黎剎公園 → 國家博物館","文化行程"],["18:00","岷倫洛 Chinatown","晚餐＋夜逛"]]},
 {date:"第3天 · 10/09 週五",title:"🛍️ 馬卡蒂 × BGC｜逛街日",stops:[
-["10:00","Greenbelt","早餐／逛街"],
-["11:30","Ayala Museum","文化＋室內行程"],
-["14:00","BGC High Street","街景＋拍照"],
-["15:00","咖啡時間","找間喜歡的 Cafe"],
-["17:00","SM Aura","購物"],
-["19:00","BGC","晚餐"]
-]},
+["10:00","Greenbelt","早餐／逛街"],["11:30","Ayala Museum","文化＋室內行程"],["14:00","BGC High Street","街景＋拍照"],["15:00","咖啡時間","找間喜歡的 Cafe"],["17:00","SM Aura","購物"],["19:00","BGC","晚餐"]]},
 {date:"第4天 · 10/10 週六",title:"🌴 放鬆自由日｜自由安排",stops:[
-["上午","自由選擇","A｜SM Mall of Asia　B｜Makati　C｜睡晚一點"],
-["下午","按摩／咖啡／購物","看兩人體力決定"],
-["晚上","最後一晚大餐","好好吃一頓"]
-]},
+["上午","自由選擇","A｜SM Mall of Asia　B｜Makati　C｜睡晚一點"],["下午","按摩／咖啡／購物","看兩人體力決定"],["晚上","最後一晚大餐","好好吃一頓"]]},
 {date:"第5天 · 10/11 週日",title:"✈️ 再見馬尼拉",stops:[
-["早餐","飯店附近","最後一杯咖啡"],
-["退房","城市花園大酒店","確認護照、手機、行李"],
-["前往機場","Grab → 馬尼拉機場","預留塞車時間"],
-["✈️","Z2132","回台灣"]
-]}
+["早餐","飯店附近","最後一杯咖啡"],["退房","城市花園大酒店","確認護照、手機、行李"],["前往機場","Grab → 馬尼拉機場","預留塞車時間"],["✈️","Z2132","回台灣"]]}
 ];
 
 let days=JSON.parse(localStorage.getItem("manila2026_days_v2")||"null")||DEFAULT_DAYS.map(d=>JSON.parse(JSON.stringify(d)));
 let active=Number(localStorage.getItem("manila2026_active")||0);
+let currentUser=null, syncReady=false, realtimeChannel=null, cloudSaveTimer=null, deletedCloudIds=[];
+let ignoreRealtimeUntil=0;
 
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function save(){localStorage.setItem("manila2026_days_v2",JSON.stringify(days));localStorage.setItem("manila2026_active",active);}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function save(){
+ localStorage.setItem("manila2026_days_v2",JSON.stringify(days));
+ localStorage.setItem("manila2026_active",active);
+ if(syncReady) queueCloudSave();
+}
+function displayUser(){
+ if(!currentUser) return "";
+ return currentUser.user_metadata?.display_name || currentUser.email?.split("@")[0] || "旅伴";
+}
+function setSyncUI(title,status){
+ ["syncTitle","homeSyncTitle"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=title;});
+ ["syncStatus","homeSyncStatus"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=status;});
+ const form=document.getElementById("authForm"), user=document.getElementById("authUser"), txt=document.getElementById("syncUserText");
+ if(form)form.style.display=currentUser?"none":"block";
+ if(user)user.style.display=currentUser?"block":"none";
+ if(txt&&currentUser)txt.textContent="目前登入："+displayUser();
+}
 function render(){
  if(!days.length){document.getElementById("dayTabs").innerHTML="";document.getElementById("activeDay").innerHTML='<div class="empty">目前沒有行程，請新增一天。</div>';return;}
  active=Math.max(0,Math.min(active,days.length-1));
  document.getElementById("dayTabs").innerHTML=days.map((d,i)=>`<button class="day-tab ${i===active?'active':''}" onclick="showDay(${i})">DAY ${String(i+1).padStart(2,'0')}</button>`).join("");
  const d=days[active];
- document.getElementById("activeDay").innerHTML=`
- <article class="mobile-day">
-  <div class="big-date">${esc(d.date)}</div><h3 class="itin-title">${esc(d.title)}</h3>
-  <div class="timeline">${d.stops.map((s,i)=>`<div class="stop" draggable="true" ondragstart="dragStopStart(event,${i})" ondragover="event.preventDefault()" ondrop="dropStop(event,${i})">
-    <div class="stop-time">${esc(s[0])}</div><div class="stop-title">${esc(s[1])}</div><div class="stop-note">${esc(s[2]||"")}</div>
-    <div class="stop-actions"><button onclick="editStop(${i})">✏️</button><button onclick="moveStop(${i},-1)">↑</button><button onclick="moveStop(${i},1)">↓</button><button onclick="deleteStop(${i})">🗑️</button><span>↕ 拖曳排序</span></div>
-  </div>`).join("")}</div>
-  <div class="day-actions"><button class="primary add-stop-main" onclick="addStop()">＋ 新增一個行程</button><button onclick="editDay()">✏️ 編輯本日</button><button onclick="moveDay(-1)">← 前一天</button><button onclick="moveDay(1)">下一天 →</button><button onclick="deleteDay()">🗑️ 刪除本日</button></div>
- </article>`; }
-function showDay(i){active=i;save();render();window.scrollTo({top:document.getElementById("days").offsetTop-55,behavior:"smooth"});}
+ document.getElementById("activeDay").innerHTML=`<article class="mobile-day"><div class="big-date">${esc(d.date)}</div><h3 class="itin-title">${esc(d.title)}</h3><div class="timeline">${d.stops.map((s,i)=>`<div class="stop" draggable="true" ondragstart="dragStopStart(event,${i})" ondragover="event.preventDefault()" ondrop="dropStop(event,${i})"><div class="stop-time">${esc(s[0])}</div><div class="stop-title">${esc(s[1])}</div><div class="stop-note">${esc(s[2]||"")}</div><div class="stop-actions"><button onclick="editStop(${i})">✏️</button><button onclick="moveStop(${i},-1)">↑</button><button onclick="moveStop(${i},1)">↓</button><button onclick="deleteStop(${i})">🗑️</button><span>↕ 拖曳排序</span></div></div>`).join("")}</div><div class="day-actions"><button class="primary add-stop-main" onclick="addStop()">＋ 新增一個行程</button><button onclick="editDay()">✏️ 編輯本日</button><button onclick="moveDay(-1)">← 前一天</button><button onclick="moveDay(1)">下一天 →</button><button onclick="deleteDay()">🗑️ 刪除本日</button></div></article>`;
+}
+function showDay(i){active=i;save();render();window.scrollTo({top:document.getElementById("page-itinerary").offsetTop-20,behavior:"smooth"});}
 function editDay(){
- const d=days[active], box=document.getElementById("activeDay");
- box.innerHTML=`<article class="mobile-day"><div class="edit-panel">
- <input id="edDate" value="${esc(d.date)}" placeholder="日期">
- <input id="edTitle" value="${esc(d.title)}" placeholder="標題">
- <textarea id="edStops" placeholder="每行一個行程，格式：時間｜地點｜備註">${d.stops.map(s=>s.map(esc).join("｜")).join("\\n")}</textarea>
- <div class="day-actions"><button class="primary" onclick="saveEdit()">✓ 儲存</button><button onclick="render()">取消</button></div>
- </div></article>`;
+ const d=days[active],box=document.getElementById("activeDay");
+ box.innerHTML=`<article class="mobile-day"><div class="edit-panel"><input id="edDate" value="${esc(d.date)}" placeholder="日期"><input id="edTitle" value="${esc(d.title)}" placeholder="標題"><textarea id="edStops" placeholder="每行一個行程，格式：時間｜地點｜備註">${d.stops.map(s=>s.map(x=>String(x??"")).join("｜")).join("\n")}</textarea><div class="day-actions"><button class="primary" onclick="saveEdit()">✓ 儲存</button><button onclick="render()">取消</button></div></div></article>`;
 }
 function saveEdit(){
- const lines=document.getElementById("edStops").value.split(/\n/).map(x=>x.trim()).filter(Boolean);
- days[active]={date:document.getElementById("edDate").value.trim()||"未命名日期",title:document.getElementById("edTitle").value.trim()||"未命名行程",stops:lines.map(x=>{let a=x.split("｜");return [a[0]||"",a[1]||"",a.slice(2).join("｜")||""];})};
+ const lines=document.getElementById("edStops").value.split(/\n/).map(x=>x.trim()).filter(Boolean),old=days[active];
+ days[active]={id:old.id,date:document.getElementById("edDate").value.trim()||"未命名日期",title:document.getElementById("edTitle").value.trim()||"未命名行程",stops:lines.map(x=>{let a=x.split("｜");return [a[0]||"",a[1]||"",a.slice(2).join("｜")||""];})};
  save();render();
 }
-function addStop(){days[active].stops.push(["時間","新地點","點「編輯本日」修改內容"]);save();render();}
+function addStop(){days[active].stops.push(["時間","新行程","點擊編輯後輸入內容"]);save();render();setTimeout(()=>editStop(days[active].stops.length-1),40);}
 function moveDay(dir){let j=active+dir;if(j<0||j>=days.length)return;[days[active],days[j]]=[days[j],days[active]];active=j;save();render();}
-function deleteDay(){if(confirm("確定刪除這一天嗎？")){days.splice(active,1);active=Math.max(0,active-1);save();render();}}
-render();
+function deleteDay(){if(confirm("確定刪除這一天嗎？")){if(days[active].id)deletedCloudIds.push(days[active].id);days.splice(active,1);active=Math.max(0,active-1);save();render();}}
+
+async function seedCloud(){
+ const rows=days.map((d,i)=>({id:d.id||undefined,day_number:i+1,date_label:d.date,title:d.title,stops:d.stops,sort_order:i+1,updated_by:displayUser(),updated_at:new Date().toISOString()}));
+ const {data,error}=await supabaseClient.from("trip_days").insert(rows).select();
+ if(error){setSyncUI("同步失敗","雲端建立失敗："+error.message);return false;}
+ days=data.sort((a,b)=>a.sort_order-b.sort_order).map(r=>({id:r.id,date:r.date_label,title:r.title,stops:r.stops||[]}));
+ localStorage.setItem("manila2026_days_v2",JSON.stringify(days));
+ return true;
+}
+async function loadCloud(){
+ setSyncUI("同步中…","正在從 Supabase 讀取行程");
+ const {data,error}=await supabaseClient.from("trip_days").select("*").order("sort_order",{ascending:true}).order("day_number",{ascending:true});
+ if(error){setSyncUI("同步失敗","讀取失敗："+error.message);return;}
+ if(!data.length){await seedCloud();}
+ else {days=data.map(r=>({id:r.id,date:r.date_label,title:r.title,stops:r.stops||[]}));active=Math.min(active,Math.max(0,days.length-1));localStorage.setItem("manila2026_days_v2",JSON.stringify(days));localStorage.setItem("manila2026_active",active);}
+ syncReady=true;setSyncUI("🟢 已同步",displayUser()+" · 雲端行程已更新");render();subscribeRealtime();
+}
+function queueCloudSave(){clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(saveCloud,350);}
+async function saveCloud(){
+ if(!syncReady||!currentUser)return;
+ ignoreRealtimeUntil=Date.now()+2000;
+ const rows=days.map((d,i)=>({id:d.id||undefined,day_number:i+1,date_label:d.date,title:d.title,stops:d.stops,sort_order:i+1,updated_by:displayUser(),updated_at:new Date().toISOString()}));
+ if(deletedCloudIds.length){await supabaseClient.from("trip_days").delete().in("id",deletedCloudIds);deletedCloudIds=[];}
+ const {data,error}=await supabaseClient.from("trip_days").upsert(rows,{onConflict:"id"}).select();
+ if(error){setSyncUI("⚠️ 尚未同步",error.message);return;}
+ days=data.sort((a,b)=>a.sort_order-b.sort_order).map(r=>({id:r.id,date:r.date_label,title:r.title,stops:r.stops||[]}));
+ localStorage.setItem("manila2026_days_v2",JSON.stringify(days));
+ setSyncUI("🟢 已同步",displayUser()+" · 最後更新："+new Date().toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit"}));
+ render();
+}
+function subscribeRealtime(){
+ if(realtimeChannel) supabaseClient.removeChannel(realtimeChannel);
+ realtimeChannel=supabaseClient.channel("trip-days-live").on("postgres_changes",{event:"*",schema:"public",table:"trip_days"},async()=>{
+   if(Date.now()<ignoreRealtimeUntil)return;
+   const {data,error}=await supabaseClient.from("trip_days").select("*").order("sort_order",{ascending:true}).order("day_number",{ascending:true});
+   if(!error&&data){days=data.map(r=>({id:r.id,date:r.date_label,title:r.title,stops:r.stops||[]}));localStorage.setItem("manila2026_days_v2",JSON.stringify(days));active=Math.min(active,Math.max(0,days.length-1));render();setSyncUI("🟢 已同步",displayUser()+" · 其他裝置剛更新");}
+ }).subscribe();
+}
+async function loginAccount(){
+ const email=document.getElementById("authEmail").value.trim(),password=document.getElementById("authPassword").value;
+ if(!email||!password){alert("請輸入 Email 和密碼");return;}
+ const {error}=await supabaseClient.auth.signInWithPassword({email,password});
+ if(error)alert("登入失敗："+error.message);
+}
+async function registerAccount(){
+ const email=document.getElementById("authEmail").value.trim(),password=document.getElementById("authPassword").value;
+ if(!email||password.length<6){alert("請輸入 Email，密碼至少 6 碼");return;}
+ const {data,error}=await supabaseClient.auth.signUp({email,password});
+ if(error){alert("註冊失敗："+error.message);return;}
+ if(!data.session)alert("註冊成功！請到 Email 完成驗證，再回網站登入。\n如果沒有收到信，再告訴我，我們再調整設定。");
+ else alert("註冊成功，已登入！");
+}
+async function logoutAccount(){await supabaseClient.auth.signOut();}
+async function initAuth(){
+ const {data}=await supabaseClient.auth.getSession();
+ currentUser=data.session?.user||null;
+ if(currentUser) await loadCloud(); else setSyncUI("尚未登入","登入後，Eva 和 Tina 就能共用同一份行程。");
+ supabaseClient.auth.onAuthStateChange(async(_event,session)=>{
+   currentUser=session?.user||null;syncReady=false;
+   if(currentUser) await loadCloud(); else {if(realtimeChannel)supabaseClient.removeChannel(realtimeChannel);setSyncUI("尚未登入","登入後，Eva 和 Tina 就能共用同一份行程。");}
+ });
+}
+render();initAuth();
 </script>
 <script>
 function goToday(e){
@@ -527,52 +600,15 @@ function showTool(type){
 
 <script>
 let dragStopIndex=null;
-function addStop(){
-  days[active].stops.push(["時間","新行程","點擊編輯後輸入內容"]);
-  save(); render();
-  setTimeout(()=>editStop(days[active].stops.length-1),40);
-}
 function editStop(i){
-  const s=days[active].stops[i];
-  const el=document.querySelectorAll("#activeDay .stop")[i];
-  el.innerHTML=`<div class="stop-edit">
-    <input id="stopTime" value="${esc(s[0])}" placeholder="時間">
-    <input id="stopTitle" value="${esc(s[1])}" placeholder="地點／行程">
-    <textarea id="stopNote" placeholder="備註">${esc(s[2]||"")}</textarea>
-    <div class="day-actions"><button class="primary" onclick="saveStop(${i})">✓ 儲存</button><button onclick="render()">取消</button></div>
-  </div>`;
+ const s=days[active].stops[i],el=document.querySelectorAll("#activeDay .stop")[i];
+ el.innerHTML=`<div class="stop-edit"><input id="stopTime" value="${esc(s[0])}" placeholder="時間"><input id="stopTitle" value="${esc(s[1])}" placeholder="地點／行程"><textarea id="stopNote" placeholder="備註">${esc(s[2]||"")}</textarea><div class="day-actions"><button class="primary" onclick="saveStop(${i})">✓ 儲存</button><button onclick="render()">取消</button></div></div>`;
 }
-function saveStop(i){
-  days[active].stops[i]=[
-    document.getElementById("stopTime").value.trim(),
-    document.getElementById("stopTitle").value.trim(),
-    document.getElementById("stopNote").value.trim()
-  ];
-  save();render();
-}
-function deleteStop(i){
-  if(confirm("確定刪除這個行程嗎？")){
-    days[active].stops.splice(i,1);save();render();
-  }
-}
-function moveStop(i,dir){
-  const j=i+dir;
-  if(j<0||j>=days[active].stops.length)return;
-  [days[active].stops[i],days[active].stops[j]]=[days[active].stops[j],days[active].stops[i]];
-  save();render();
-}
-function dragStopStart(e,i){
-  dragStopIndex=i;
-  e.dataTransfer.effectAllowed="move";
-}
-function dropStop(e,i){
-  e.preventDefault();
-  if(dragStopIndex===null||dragStopIndex===i)return;
-  const arr=days[active].stops;
-  const item=arr.splice(dragStopIndex,1)[0];
-  arr.splice(i,0,item);
-  dragStopIndex=null;save();render();
-}
+function saveStop(i){days[active].stops[i]=[document.getElementById("stopTime").value.trim(),document.getElementById("stopTitle").value.trim(),document.getElementById("stopNote").value.trim()];save();render();}
+function deleteStop(i){if(confirm("確定刪除這個行程嗎？")){days[active].stops.splice(i,1);save();render();}}
+function moveStop(i,dir){const j=i+dir;if(j<0||j>=days[active].stops.length)return;[days[active].stops[i],days[active].stops[j]]=[days[active].stops[j],days[active].stops[i]];save();render();}
+function dragStopStart(e,i){dragStopIndex=i;e.dataTransfer.effectAllowed="move";}
+function dropStop(e,i){e.preventDefault();if(dragStopIndex===null||dragStopIndex===i)return;const arr=days[active].stops,item=arr.splice(dragStopIndex,1)[0];arr.splice(i,0,item);dragStopIndex=null;save();render();}
 </script>
 </body>
 </html>
