@@ -398,6 +398,11 @@ body:not(.home-view) #dashboard{display:none}
         <button class="primary" onclick="loginAccount()">登入</button>
         <button onclick="registerAccount()">註冊新帳號</button>
       </div>
+      <button style="margin-top:8px;background:transparent;color:#8b6f61;text-decoration:underline;padding:4px 0" onclick="resetPassword()">忘記密碼／重設密碼</button>
+    </div>
+    <div id="passwordResetForm" style="display:none;margin-top:10px">
+      <input id="newPassword" type="password" autocomplete="new-password" placeholder="新密碼（至少 6 碼）">
+      <div class="auth-actions"><button class="primary" onclick="updatePassword()">✓ 設定新密碼</button><button onclick="cancelPasswordReset()">取消</button></div>
     </div>
     <div id="authUser" style="display:none">
       <div class="sync-user" id="syncUserText"></div>
@@ -460,9 +465,10 @@ function displayUser(){
 function setSyncUI(title,status){
  ["syncTitle","homeSyncTitle"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=title;});
  ["syncStatus","homeSyncStatus"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=status;});
- const form=document.getElementById("authForm"), user=document.getElementById("authUser"), txt=document.getElementById("syncUserText");
+ const form=document.getElementById("authForm"), user=document.getElementById("authUser"), txt=document.getElementById("syncUserText"), reset=document.getElementById("passwordResetForm");
  if(form)form.style.display=currentUser?"none":"block";
  if(user)user.style.display=currentUser?"block":"none";
+ if(reset && !currentUser) reset.style.display=reset.style.display||"none";
  if(txt&&currentUser)txt.textContent="目前登入："+displayUser();
 }
 function render(){
@@ -537,6 +543,27 @@ async function registerAccount(){
  if(!data.session)alert("註冊成功！請到 Email 完成驗證，再回網站登入。\n如果沒有收到信，再告訴我，我們再調整設定。");
  else alert("註冊成功，已登入！");
 }
+async function resetPassword(){
+ const email=document.getElementById("authEmail").value.trim();
+ if(!email){alert("請先輸入你的 Email，再按「忘記密碼／重設密碼」");return;}
+ const redirectTo=window.location.href.split("#")[0];
+ const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo});
+ if(error){alert("寄送失敗："+error.message);return;}
+ alert("重設密碼信已寄出！請到 Gmail 收信，點開連結後回到這個網站設定新密碼。");
+}
+async function updatePassword(){
+ const password=document.getElementById("newPassword").value;
+ if(password.length<6){alert("新密碼至少需要 6 碼");return;}
+ const {error}=await supabaseClient.auth.updateUser({password});
+ if(error){alert("密碼更新失敗："+error.message);return;}
+ document.getElementById("passwordResetForm").style.display="none";
+ document.getElementById("newPassword").value="";
+ alert("密碼已更新完成！現在可以用新密碼登入。");
+}
+function cancelPasswordReset(){
+ const el=document.getElementById("passwordResetForm");
+ if(el)el.style.display="none";
+}
 async function logoutAccount(){await supabaseClient.auth.signOut();}
 async function initAuth(){
  const {data}=await supabaseClient.auth.getSession();
@@ -544,6 +571,12 @@ async function initAuth(){
  if(currentUser) await loadCloud(); else setSyncUI("尚未登入","登入後，Eva 和 Tina 就能共用同一份行程。");
  supabaseClient.auth.onAuthStateChange(async(_event,session)=>{
    currentUser=session?.user||null;syncReady=false;
+   if(_event==="PASSWORD_RECOVERY"){
+     const form=document.getElementById("authForm"), reset=document.getElementById("passwordResetForm"), user=document.getElementById("authUser");
+     if(form)form.style.display="none"; if(user)user.style.display="none"; if(reset)reset.style.display="block";
+     setSyncUI("🔐 重設密碼","請輸入新的登入密碼");
+     return;
+   }
    if(currentUser) await loadCloud(); else {if(realtimeChannel)supabaseClient.removeChannel(realtimeChannel);setSyncUI("尚未登入","登入後，Eva 和 Tina 就能共用同一份行程。");}
  });
 }
