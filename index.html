@@ -21,6 +21,50 @@ section{padding:24px 18px}.title{display:flex;align-items:end;justify-content:sp
 .mapbtn{display:inline-block;margin-top:10px;padding:9px 12px;background:var(--green);color:#fff;text-decoration:none;border-radius:10px;font-size:12px}
 footer{text-align:center;padding:30px 20px 45px;color:var(--muted);font-size:12px}
 @media(min-width:761px){body{padding:20px 0}.app{border-radius:24px;overflow:hidden}}
+
+.planner-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.planner-actions button,.editbar button{border:0;border-radius:12px;padding:10px 13px;background:#eee8dc;color:var(--green);font-weight:700;cursor:pointer}
+.planner-actions .primary{background:var(--green);color:white}
+.itin-card{background:white;border-radius:18px;padding:16px;margin:10px 0;box-shadow:0 4px 18px #173c3510;border-left:4px solid var(--orange)}
+.itin-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.itin-title{margin:3px 0 0;font-size:18px;color:var(--green)}
+.itin-date{font-size:11px;color:var(--orange);font-weight:800;letter-spacing:1px}
+.itin-body{margin-top:10px;line-height:1.7;font-size:14px;white-space:pre-wrap}
+.editbar{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.editbar button{font-size:12px}
+.editbar .danger{color:#a64d3d;background:#f7e8e3}
+.editbar .drag{cursor:grab}
+.itin-edit{display:grid;gap:8px;margin-top:10px}
+.itin-edit input,.itin-edit textarea{width:100%;padding:10px;border:1px solid #ddd6ca;border-radius:10px;font:inherit;background:#fffdf9}
+.itin-edit textarea{min-height:110px;resize:vertical}
+.empty{background:#fff;border:1px dashed #cfc6b8;border-radius:16px;padding:20px;text-align:center;color:var(--muted)}
+
+.day-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:12px 0 16px;position:sticky;top:52px;z-index:4;background:var(--cream);padding:8px 0}
+.day-tab{border:0;background:#e9e1d3;color:var(--green);border-radius:12px;padding:10px 4px;font-weight:800;font-size:12px;cursor:pointer}
+.day-tab.active{background:var(--green);color:#fff}
+.mobile-day{background:white;border-radius:20px;padding:18px;box-shadow:0 6px 22px #173c3512}
+.mobile-day .big-date{font-size:12px;color:var(--orange);font-weight:800;letter-spacing:1px}
+.mobile-day h3{font-size:23px;line-height:1.3;margin:7px 0 16px;color:var(--green)}
+.timeline{position:relative;margin:4px 0 8px;padding-left:22px}
+.timeline:before{content:"";position:absolute;left:6px;top:5px;bottom:5px;width:2px;background:#ddd3c3}
+.stop{position:relative;padding:0 0 16px}
+.stop:before{content:"";position:absolute;left:-20px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--orange);border:3px solid var(--cream)}
+.stop-time{font-size:12px;font-weight:800;color:var(--orange)}
+.stop-title{font-weight:800;margin:2px 0}
+.stop-note{font-size:13px;color:var(--muted);line-height:1.5}
+.day-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.day-actions button{border:0;border-radius:11px;padding:9px 11px;background:#eee8dc;color:var(--green);font-weight:700}
+.day-actions .primary{background:var(--green);color:white}
+.edit-panel{margin-top:14px;padding-top:14px;border-top:1px solid #eee}
+.edit-panel input,.edit-panel textarea{width:100%;padding:10px;border:1px solid #ddd6ca;border-radius:10px;font:inherit;margin-bottom:8px;background:#fffdf9}
+.edit-panel textarea{min-height:150px}
+@media(max-width:520px){
+ section{padding:20px 14px}.hero{padding:24px 17px}.hero h1{font-size:34px}
+ .day-tabs{grid-template-columns:repeat(5,1fr);gap:4px}
+ .day-tab{font-size:11px;padding:9px 2px}
+ .mobile-day{padding:16px}.mobile-day h3{font-size:21px}
+ nav a{font-size:12px;padding:8px 10px}
+}
 </style>
 </head>
 <body>
@@ -41,16 +85,9 @@ footer{text-align:center;padding:30px 20px 45px;color:var(--muted);font-size:12p
 </nav>
 
 <section id="days">
-<div class="title"><h2>5 DAYS</h2><small>行程總覽</small></div>
-<div class="card day"><div class="date">DAY 01 · 10/07 WED</div><h3>✈️ 抵達馬尼拉｜MAKATI NIGHT</h3><div class="route"><b>抵達 → 飯店 → Poblacion</b><br>NAIA → Grab → City Garden GRAND Hotel 入住 → 晚餐 → Makati 夜晚散步</div><span class="tag">不排太滿</span><span class="tag">第一晚吃好</span><br><a class="mapbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=City+Garden+Grand+Hotel+Makati">📍 飯店地圖</a></div>
-
-<div class="card day"><div class="date">DAY 02 · 10/08 THU</div><h3>🏛️ OLD MANILA｜歷史 × 美食</h3><div class="route"><b>09:00</b> Grab 前往 Intramuros<br><b>09:30</b> Intramuros 散步 → Manila Cathedral → Fort Santiago<br><b>12:30</b> 午餐<br><b>14:00</b> San Agustin Church<br><b>15:30</b> Rizal Park → National Museum of Fine Arts<br><b>18:00</b> 前往 Binondo 吃晚餐</div><span class="tag">歷史文化</span><span class="tag">拍照</span><span class="tag">美食</span><br><a class="mapbtn" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Intramuros+Manila">📍 開啟行程地圖</a></div>
-
-<div class="card day"><div class="date">DAY 03 · 10/09 FRI</div><h3>🛍️ MAKATI × BGC｜逛街日</h3><div class="route"><b>10:00</b> Greenbelt 早餐／逛街<br><b>11:30</b> Ayala Museum<br><b>14:00</b> 前往 BGC High Street<br><b>15:00</b> BGC 街景＋咖啡<br><b>17:00</b> SM Aura<br><b>19:00</b> BGC 晚餐</div><span class="tag">購物</span><span class="tag">咖啡</span><span class="tag">拍照</span><br><a class="mapbtn" target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=Bonifacio+High+Street+Taguig">📍 BGC 地圖</a></div>
-
-<div class="card day"><div class="date">DAY 04 · 10/10 SAT</div><h3>🌴 RELAX DAY｜自由安排</h3><div class="route"><b>A｜購物派</b> SM Mall of Asia → Manila Bay → 晚餐<br><b>B｜Makati 派</b> 咖啡 → Greenbelt → Glorietta → Poblacion<br><b>C｜放鬆派</b> 早餐 → 按摩 → 下午茶 → 最後一晚大餐</div><span class="tag">看體力決定</span><span class="tag">不要把自己操爆</span></div>
-
-<div class="card day"><div class="date">DAY 05 · 10/11 SUN</div><h3>✈️ GOODBYE MANILA</h3><div class="route">早餐 → Check-out → 最後採買 → Grab → NAIA → Z2132</div><span class="tag">回家啦</span><span class="tag">記得檢查護照</span></div>
+<div class="title"><h2>MY ITINERARY 📅</h2><small>手機版行程</small></div>
+<div class="day-tabs" id="dayTabs"></div>
+<div id="activeDay"></div>
 </section>
 
 <section id="spots">
@@ -127,5 +164,157 @@ function calc(){
   const total=ids.reduce((s,id)=>s+(Number(document.getElementById(id).value)||0),0);
   document.getElementById('total').textContent=total.toLocaleString();
 }
+</script>
+<script>
+const DEFAULT_DAYS = [
+ {date:"DAY 01 · 10/07 WED",title:"✈️ 抵達馬尼拉｜MAKATI NIGHT",body:"抵達 → Grab → City Garden GRAND Hotel 入住 → Poblacion 晚餐 → Makati 夜晚散步"},
+ {date:"DAY 02 · 10/08 THU",title:"🏛️ OLD MANILA｜歷史 × 美食",body:"09:00 Grab 前往 Intramuros\n09:30 Intramuros → Manila Cathedral → Fort Santiago\n12:30 午餐\n14:00 San Agustin Church\n15:30 Rizal Park → National Museum\n18:00 Binondo 晚餐"},
+ {date:"DAY 03 · 10/09 FRI",title:"🛍️ MAKATI × BGC｜逛街日",body:"10:00 Greenbelt 早餐／逛街\n11:30 Ayala Museum\n14:00 BGC High Street\n15:00 街景＋咖啡\n17:00 SM Aura\n19:00 BGC 晚餐"},
+ {date:"DAY 04 · 10/10 SAT",title:"🌴 RELAX DAY｜自由安排",body:"A｜SM Mall of Asia＋Manila Bay\nB｜Makati 咖啡＋Greenbelt＋Glorietta\nC｜按摩＋下午茶＋最後一晚大餐"},
+ {date:"DAY 05 · 10/11 SUN",title:"✈️ GOODBYE MANILA",body:"早餐 → Check-out → 最後採買 → Grab → NAIA → Z2132"}
+];
+
+let days = JSON.parse(localStorage.getItem("manila2026_days") || "null") || DEFAULT_DAYS.map(x=>({...x}));
+
+function esc(s){
+ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function saveDays(){localStorage.setItem("manila2026_days",JSON.stringify(days));}
+function renderDays(){
+ const box=document.getElementById("daysList");
+ if(!days.length){box.innerHTML='<div class="empty">目前沒有行程，按「新增一天」開始。</div>';return;}
+ box.innerHTML=days.map((d,i)=>`
+ <article class="itin-card" draggable="true" ondragstart="dragStart(event,${i})" ondragover="event.preventDefault()" ondrop="dropDay(event,${i})">
+   <div class="itin-head">
+    <div><div class="itin-date">${esc(d.date)}</div><h3 class="itin-title">${esc(d.title)}</h3></div>
+    <span class="tag">DAY ${String(i+1).padStart(2,'0')}</span>
+   </div>
+   <div class="itin-body">${esc(d.body)}</div>
+   <div class="editbar">
+    <button class="drag" title="拖曳卡片排序">↕ 拖曳排序</button>
+    <button onclick="editDay(${i})">✏️ 編輯</button>
+    <button onclick="moveDay(${i},-1)">↑</button>
+    <button onclick="moveDay(${i},1)">↓</button>
+    <button class="danger" onclick="deleteDay(${i})">🗑️ 刪除</button>
+   </div>
+ </article>`).join("");
+}
+function addDay(){
+ days.push({date:`DAY ${String(days.length+1).padStart(2,'0')}`,title:"🌴 新行程",body:"點「編輯」加入今天的時間、景點、餐廳與交通。"});
+ saveDays();renderDays();
+ setTimeout(()=>editDay(days.length-1),50);
+}
+function editDay(i){
+ const d=days[i];
+ const card=document.querySelectorAll(".itin-card")[i];
+ card.querySelector(".itin-body").outerHTML=`<div class="itin-edit">
+ <input id="editDate" value="${esc(d.date)}" placeholder="日期，例如 DAY 01 · 10/07 WED">
+ <input id="editTitle" value="${esc(d.title)}" placeholder="行程標題">
+ <textarea id="editBody" placeholder="輸入時間軸與備註">${esc(d.body)}</textarea>
+ <div class="editbar"><button class="primary" onclick="saveEdit(${i})">✓ 儲存</button><button onclick="renderDays()">取消</button></div>
+ </div>`;
+ card.querySelector(".editbar").remove();
+}
+function saveEdit(i){
+ days[i]={date:document.getElementById("editDate").value.trim()||"未命名日期",title:document.getElementById("editTitle").value.trim()||"未命名行程",body:document.getElementById("editBody").value.trim()||""};
+ saveDays();renderDays();
+}
+function deleteDay(i){
+ if(confirm("確定要刪除這一天的行程嗎？")){days.splice(i,1);saveDays();renderDays();}
+}
+function moveDay(i,dir){
+ const j=i+dir;if(j<0||j>=days.length)return;
+ [days[i],days[j]]=[days[j],days[i]];saveDays();renderDays();
+}
+let dragIndex=null;
+function dragStart(e,i){dragIndex=i;e.dataTransfer.effectAllowed="move";}
+function dropDay(e,i){
+ if(dragIndex===null||dragIndex===i)return;
+ const item=days.splice(dragIndex,1)[0];days.splice(i,0,item);dragIndex=null;saveDays();renderDays();
+}
+function resetDays(){
+ if(confirm("還原成預設的 5 天行程？目前自行修改的內容會被覆蓋。")){
+  days=DEFAULT_DAYS.map(x=>({...x}));saveDays();renderDays();
+ }
+}
+renderDays();
+</script>
+
+<script>
+const DEFAULT_DAYS = [
+{date:"DAY 01 · 10/07 WED",title:"✈️ 抵達馬尼拉｜MAKATI NIGHT",stops:[
+["抵達","NAIA → Grab → City Garden GRAND Hotel","先入住、放行李"],
+["晚上","Poblacion","晚餐＋附近散步"]
+]},
+{date:"DAY 02 · 10/08 THU",title:"🏛️ OLD MANILA｜歷史 × 美食",stops:[
+["09:00","前往 Intramuros","Grab"],
+["09:30","Intramuros → Manila Cathedral → Fort Santiago","歷史街區＋拍照"],
+["12:30","午餐","找附近菲律賓料理"],
+["14:00","San Agustin Church","歷史教堂"],
+["15:30","Rizal Park → National Museum","文化行程"],
+["18:00","Binondo","晚餐＋夜逛"]
+]},
+{date:"DAY 03 · 10/09 FRI",title:"🛍️ MAKATI × BGC｜逛街日",stops:[
+["10:00","Greenbelt","早餐／逛街"],
+["11:30","Ayala Museum","文化＋室內行程"],
+["14:00","BGC High Street","街景＋拍照"],
+["15:00","咖啡時間","找間喜歡的 Cafe"],
+["17:00","SM Aura","購物"],
+["19:00","BGC","晚餐"]
+]},
+{date:"DAY 04 · 10/10 SAT",title:"🌴 RELAX DAY｜自由安排",stops:[
+["上午","自由選擇","A｜Mall of Asia　B｜Makati　C｜睡晚一點"],
+["下午","按摩／咖啡／購物","看兩人體力決定"],
+["晚上","最後一晚大餐","好好吃一頓"]
+]},
+{date:"DAY 05 · 10/11 SUN",title:"✈️ GOODBYE MANILA",stops:[
+["早餐","飯店附近","最後一杯咖啡"],
+["Check-out","City Garden GRAND Hotel","確認護照、手機、行李"],
+["前往機場","Grab → NAIA","預留塞車時間"],
+["✈️","Z2132","回台灣"]
+]}
+];
+
+let days=JSON.parse(localStorage.getItem("manila2026_days_v2")||"null")||DEFAULT_DAYS.map(d=>JSON.parse(JSON.stringify(d)));
+let active=Number(localStorage.getItem("manila2026_active")||0);
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function save(){localStorage.setItem("manila2026_days_v2",JSON.stringify(days));localStorage.setItem("manila2026_active",active);}
+function render(){
+ if(!days.length){document.getElementById("dayTabs").innerHTML="";document.getElementById("activeDay").innerHTML='<div class="empty">目前沒有行程，請新增一天。</div>';return;}
+ active=Math.max(0,Math.min(active,days.length-1));
+ document.getElementById("dayTabs").innerHTML=days.map((d,i)=>`<button class="day-tab ${i===active?'active':''}" onclick="showDay(${i})">DAY ${String(i+1).padStart(2,'0')}</button>`).join("");
+ const d=days[active];
+ document.getElementById("activeDay").innerHTML=`
+ <article class="mobile-day">
+  <div class="big-date">${esc(d.date)}</div><h3>${esc(d.title)}</h3>
+  <div class="timeline">${d.stops.map((s,i)=>`<div class="stop"><div class="stop-time">${esc(s[0])}</div><div class="stop-title">${esc(s[1])}</div><div class="stop-note">${esc(s[2]||"")}</div></div>`).join("")}</div>
+  <div class="day-actions">
+   <button class="primary" onclick="editDay()">✏️ 編輯本日</button>
+   <button onclick="addStop()">＋ 新增行程</button>
+   <button onclick="moveDay(-1)">← 前一天</button><button onclick="moveDay(1)">下一天 →</button>
+   <button onclick="deleteDay()">🗑️ 刪除本日</button>
+  </div>
+ </article>`;
+}
+function showDay(i){active=i;save();render();window.scrollTo({top:document.getElementById("days").offsetTop-55,behavior:"smooth"});}
+function editDay(){
+ const d=days[active], box=document.getElementById("activeDay");
+ box.innerHTML=`<article class="mobile-day"><div class="edit-panel">
+ <input id="edDate" value="${esc(d.date)}" placeholder="日期">
+ <input id="edTitle" value="${esc(d.title)}" placeholder="標題">
+ <textarea id="edStops" placeholder="每行一個行程，格式：時間｜地點｜備註">${d.stops.map(s=>s.map(esc).join("｜")).join("\\n")}</textarea>
+ <div class="day-actions"><button class="primary" onclick="saveEdit()">✓ 儲存</button><button onclick="render()">取消</button></div>
+ </div></article>`;
+}
+function saveEdit(){
+ const lines=document.getElementById("edStops").value.split(/\n/).map(x=>x.trim()).filter(Boolean);
+ days[active]={date:document.getElementById("edDate").value.trim()||"未命名日期",title:document.getElementById("edTitle").value.trim()||"未命名行程",stops:lines.map(x=>{let a=x.split("｜");return [a[0]||"",a[1]||"",a.slice(2).join("｜")||""];})};
+ save();render();
+}
+function addStop(){days[active].stops.push(["時間","新地點","點「編輯本日」修改內容"]);save();render();}
+function moveDay(dir){let j=active+dir;if(j<0||j>=days.length)return;[days[active],days[j]]=[days[j],days[active]];active=j;save();render();}
+function deleteDay(){if(confirm("確定刪除這一天嗎？")){days.splice(active,1);active=Math.max(0,active-1);save();render();}}
+render();
 </script></body>
 </html>
