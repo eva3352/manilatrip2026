@@ -254,69 +254,98 @@ body:not(.home-view) #dashboard{display:none}
 
 .sync-card input{width:100%;padding:11px 12px;border:1px solid #ddd6ca;border-radius:11px;font:inherit;background:#fffdf9;margin:4px 0}.auth-actions{display:flex;gap:8px;margin-top:8px}.sync-card button{border:0;border-radius:11px;padding:10px 13px;background:#eee8dc;color:var(--green);font-weight:700;cursor:pointer}.sync-card button.primary{background:var(--green);color:white}.sync-user{background:#f6f0ea;border-radius:11px;padding:11px;margin-bottom:8px;font-size:13px}.sync-home{margin-bottom:10px}
 
-/* HERO FINAL POLISH — generous spacing + complete flight details */
-.hero{padding:0;background:none}
-.hero-photo{min-height:352px;background:linear-gradient(180deg,rgba(7,18,28,.18) 0%,rgba(7,18,28,.34) 42%,rgba(7,18,28,.74) 100%),url("https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=1400&q=90") center/cover}
-.hero-overlay{min-height:352px;padding:28px 22px 18px;display:flex;flex-direction:column;justify-content:space-between;color:#fff}
-.hero-top{display:flex;flex-direction:column;gap:5px}
-.kicker{font-size:11px;letter-spacing:2.2px;opacity:.82;margin-bottom:2px}
-.hero h1{font-size:42px;line-height:1;margin:2px 0 2px;font-weight:800;letter-spacing:.8px}
-.hero-name{font-size:20px;font-weight:700;margin:0;line-height:1.25}
-.hero-date{font-size:12px;margin:2px 0 0;opacity:.9}
-.hero-bottom{display:flex;flex-direction:column;gap:10px}
-.flight-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.flight-card{min-height:138px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.34);border-radius:16px;padding:13px 14px;backdrop-filter:blur(12px);box-shadow:0 10px 26px rgba(0,0,0,.12)}
-.flight-card .flight-label{font-size:10px;letter-spacing:1px;opacity:.78;display:block;margin-bottom:3px}
-.flight-card .flight-no{font-size:21px;line-height:1.1;font-weight:800;display:block;letter-spacing:.4px}
-.flight-card .flight-route{font-size:10px;opacity:.88;display:block;margin-top:4px}
-.flight-times{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:7px;margin-top:10px}
-.flight-point small{display:block;font-size:8px;opacity:.7;margin-bottom:1px}
-.flight-point strong{display:block;font-size:17px;line-height:1.05;letter-spacing:.2px}
-.flight-point em{display:block;font-size:8px;font-style:normal;opacity:.75;margin-top:3px}
-.flight-arrow{font-size:15px;opacity:.7;padding-bottom:5px}
-.flight-extra{display:flex;gap:12px;margin-top:9px;padding-top:7px;border-top:1px solid rgba(255,255,255,.18)}
-.flight-extra span{font-size:8px;opacity:.7}.flight-extra b{font-size:10px;margin-left:3px}
-.flight-note{font-size:8px;opacity:.65;margin-top:5px}
-.hero-status{margin-top:0;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.16);font-size:10px;display:flex;justify-content:space-between;align-items:center}
-.hero-status strong{font-size:11px;letter-spacing:.3px}
-@media(max-width:520px){
-  .hero-photo{min-height:348px}
-  .hero-overlay{min-height:348px;padding:23px 16px 14px}
-  .hero h1{font-size:38px}
-  .hero-name{font-size:18px}
-  .flight-row{gap:8px}
-  .flight-card{min-height:136px;padding:11px}
-  .flight-card .flight-no{font-size:18px}
-  .flight-times{gap:4px;margin-top:9px}
-  .flight-point strong{font-size:15px}
-  .flight-extra{gap:8px;margin-top:8px}
-  .flight-extra b{font-size:9px}
-  .flight-note{font-size:7px}
-}
-
-/* HERO SPACING V2 — more breathing room */
-.hero-photo{min-height:430px}
-.hero-overlay{min-height:430px;padding:38px 28px 24px}
-.hero-top{gap:8px}
-.hero h1{margin:8px 0 4px}
-.hero-name{margin:0 0 2px}
-.hero-date{margin:4px 0 0}
-.hero-bottom{gap:16px}
-.flight-row{gap:16px}
-.flight-card{min-height:160px;padding:16px 17px;border-radius:18px}
-.flight-card .flight-label{margin-bottom:5px}
-.flight-card .flight-route{margin-top:6px}
-.flight-times{gap:10px;margin-top:15px}
-.flight-point strong{font-size:19px}
-.flight-arrow{font-size:16px;padding-bottom:6px}
-.flight-extra{gap:18px;margin-top:13px;padding-top:9px}
-.hero-status{padding:11px 13px}
+/* HERO — OSAKA-STYLE COMPACT FLIGHT HEADER */
+.hero{padding:0;background:none;overflow:visible}
+.hero-photo{min-height:322px;background:linear-gradient(180deg,rgba(8,16,22,.12) 0%,rgba(8,16,22,.24) 55%,rgba(8,16,22,.58) 100%),url("https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=1400&q=90") center/cover}
+.hero-overlay{min-height:322px;box-sizing:border-box;padding:28px 18px 108px;display:block;color:#fff}
+.hero-top{display:block}
+.kicker{font-size:10px;letter-spacing:2px;opacity:.9;margin:0 0 8px}
+.hero h1{font-size:46px;line-height:1.02;letter-spacing:.5px;margin:0 0 8px;font-weight:800}
+.hero-name{font-size:22px;font-weight:700;margin:0 0 8px;line-height:1.2}
+.hero-date{font-size:13px;margin:0;opacity:.95}
+.hero-bottom{display:block}
+.flight-panel{position:relative;margin-top:-92px;padding:0 14px 10px;background:transparent}
+.flight-heading{display:none}
+.flight-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.flight-card{min-height:0;background:rgba(75,72,70,.62);border:1px solid rgba(255,255,255,.48);border-radius:14px;padding:11px 13px;backdrop-filter:blur(10px);box-shadow:0 8px 22px rgba(0,0,0,.12);color:#fff}
+.flight-card-top{display:flex;justify-content:space-between;align-items:center;margin:0 0 4px}
+.flight-label,.flight-date{font-size:9px!important;letter-spacing:.7px;color:#fff;opacity:.82!important;font-weight:700}
+.flight-date{letter-spacing:.4px}
+.flight-main{display:flex;align-items:baseline;gap:8px;margin:0 0 4px}
+.flight-no{font-size:20px!important;line-height:1!important;font-weight:800;color:#fff;opacity:1!important}
+.flight-airline{font-size:9px!important;color:#fff;opacity:.72!important}
+.flight-times{display:grid;grid-template-columns:1fr;gap:0;padding:0;border:0}
+.flight-point small{font-size:10px!important;color:#fff;opacity:.86!important;white-space:nowrap}
+.flight-point strong{display:inline;font-size:15px;line-height:1.1;color:#fff}
+.flight-point em{display:none}
+.flight-arrow{display:none}
+.flight-times .flight-point:first-child:after{content:" → ";font-size:12px;opacity:.7}
+.flight-times .flight-point:first-child strong:after{content:""}
+.flight-times .flight-point:last-child{display:inline}
+.flight-times .flight-point:last-child small{margin-left:0}
+.flight-extra{display:none}
+.flight-note{display:none}
+.hero-status{display:flex;justify-content:space-between;margin-top:8px;padding:9px 11px;border-radius:11px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:10px}
+.hero-status span{font-size:10px}
 @media(max-width:700px){
-  .hero-photo{min-height:650px}
-  .hero-overlay{min-height:650px;padding:30px 16px 16px}
-  .hero h1{font-size:38px}
-  .flight-row{grid-template-columns:1fr;gap:12px}
-  .flight-card{min-height:150px}
+ .hero-photo{min-height:300px}
+ .hero-overlay{min-height:300px;padding:25px 14px 92px}
+ .hero h1{font-size:38px;margin-bottom:7px}
+ .hero-name{font-size:19px;margin-bottom:7px}
+ .hero-date{font-size:12px}
+ .flight-panel{margin-top:-76px;padding:0 10px 10px}
+ .flight-row{gap:7px}
+ .flight-card{padding:10px 10px;border-radius:12px}
+ .flight-card-top{margin-bottom:3px}
+ .flight-label,.flight-date{font-size:8px!important}
+ .flight-main{gap:6px;margin-bottom:3px}
+ .flight-no{font-size:18px!important}
+ .flight-airline{font-size:8px!important}
+ .flight-point small{font-size:9px!important}
+ .flight-point strong{font-size:14px}
+ .hero-status{margin-top:7px;padding:8px 10px}
+}
+</style>
+<style>
+/* AIRY HERO / FLIGHT PANEL */
+.hero{padding:0;background:var(--cream);color:var(--ink);overflow:visible}
+.hero-photo{min-height:270px;background:linear-gradient(180deg,#0002 0%,#0006 100%),url("https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=1400&q=88") center/cover}
+.hero-overlay{padding:34px 28px 46px;color:#fff}
+.hero-top{max-width:760px}
+.hero h1{font-size:42px;line-height:1.05;letter-spacing:.5px;margin:14px 0 12px;font-weight:800}
+.hero-name{font-size:22px;font-weight:700;margin:0 0 9px}
+.hero-date{font-size:13px;margin:0;opacity:.92}
+.flight-panel{padding:30px 28px 28px;background:var(--cream)}
+.flight-heading{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 16px;color:#8f7467}
+.flight-heading span{font-size:10px;letter-spacing:2px;font-weight:800}
+.flight-heading small{font-size:11px;color:var(--muted)}
+.flight-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.flight-card{background:rgba(255,253,250,.96);border:1px solid #e8ddd3;border-radius:20px;padding:20px 20px 17px;box-shadow:0 8px 26px #4b392d10;backdrop-filter:none}
+.flight-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.flight-label,.flight-date{font-size:10px!important;letter-spacing:1px;color:#a87b6b;opacity:1!important;font-weight:800}
+.flight-date{color:#9a8f87;font-weight:700;letter-spacing:.5px}
+.flight-main{display:flex;align-items:baseline;gap:9px;margin-bottom:14px}
+.flight-no{font-size:29px!important;line-height:1!important;font-weight:800;color:#4b4540;opacity:1!important}
+.flight-airline{font-size:10px!important;color:#9a8f87;opacity:1!important}
+.flight-times{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:5px 0 16px;border-bottom:1px solid #ebe2da}
+.flight-point small{font-size:10px!important;color:#8f8881;opacity:1!important}
+.flight-point strong{display:block;font-size:25px;line-height:1.15;color:#4b4540}
+.flight-point em{display:block;font-size:10px;color:#9a8f87;font-style:normal;margin-top:4px}
+.flight-arrow{font-size:20px;color:#b98570}
+.flight-extra{display:flex;gap:28px;margin-top:14px;padding-top:0!important;color:#9a8f87;font-size:10px}
+.flight-extra span{display:flex;gap:6px;align-items:center;font-size:10px!important}
+.flight-extra b{font-size:11px!important;color:#6f6258}
+.hero-status{display:flex;justify-content:space-between;margin-top:18px;padding:12px 14px;border-radius:13px;background:#f1e8df;border:1px solid #e5d8ce;color:#7d6a60;font-size:11px}
+.hero-status span{font-size:11px}
+@media(max-width:700px){
+ .hero-photo{min-height:285px}
+ .hero-overlay{padding:28px 18px 54px}
+ .hero h1{font-size:38px;margin-top:12px}
+ .hero-name{font-size:20px}
+ .flight-panel{padding:25px 16px 24px}
+ .flight-row{grid-template-columns:1fr;gap:14px}
+ .flight-card{padding:18px 17px 15px}
+ .flight-point strong{font-size:24px}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -324,43 +353,38 @@ body:not(.home-view) #dashboard{display:none}
 <body>
 <div class="app">
 <div id="home"></div><header class="hero">
-<div class="hero-photo">
-  <div class="hero-overlay">
-    <div class="hero-top">
-      <div class="kicker">TRAVEL COMPANION · 2026</div>
-      <h1>MANILA 2026</h1>
-      <p class="hero-name">Eva × Tina｜雙人自由行</p>
-      <p class="hero-date">2026.10.07 — 10.11｜5天4夜</p>
-    </div>
-    <div class="hero-bottom">
-      <div class="flight-row">
-        <div class="flight-card">
-          <span class="flight-label">去程 OUTBOUND · 10/07</span>
-          <span class="flight-no">Z2133</span>
-          <span class="flight-route">高雄 KHH → 馬尼拉 MNL · Philippines AirAsia</span>
-          <div class="flight-times">
-            <div class="flight-point"><small>KHH 高雄</small><strong>18:25</strong><em>國際航廈</em></div>
-            <div class="flight-arrow">→</div>
-            <div class="flight-point"><small>MNL 馬尼拉</small><strong>20:15</strong><em>T1 第一航廈</em></div>
-          </div>
-          <div class="flight-extra"><span>航程 <b>1h 50m</b></span><span>機型 <b>A320</b></span></div>
-        </div>
-        <div class="flight-card">
-          <span class="flight-label">回程 RETURN · 10/11</span>
-          <span class="flight-no">Z2132</span>
-          <span class="flight-route">馬尼拉 MNL → 高雄 KHH · Philippines AirAsia</span>
-          <div class="flight-times">
-            <div class="flight-point"><small>MNL 馬尼拉</small><strong>15:40</strong><em>T1 第一航廈</em></div>
-            <div class="flight-arrow">→</div>
-            <div class="flight-point"><small>KHH 高雄</small><strong>17:25</strong><em>國際航廈</em></div>
-          </div>
-          <div class="flight-extra"><span>航程 <b>1h 45m</b></span><span>機型 <b>A320</b></span></div>
-        </div>
+  <div class="hero-photo">
+    <div class="hero-overlay">
+      <div class="hero-top">
+        <div class="kicker">TRAVEL COMPANION · 2026</div>
+        <h1>MANILA 2026</h1>
+        <p class="hero-name">Eva × Tina｜雙人自由行</p>
+        <p class="hero-date">2026.10.07 — 10.11｜5天4夜</p>
       </div>
-      <div class="hero-status"><span><strong>旅行準備中</strong></span><span>📅 10/07 出發</span></div>
     </div>
   </div>
-</div>
+  <div class="flight-panel">
+    <div class="flight-heading"><span>FLIGHT INFO</span><small>來回航班</small></div>
+    <div class="flight-row">
+      <div class="flight-card">
+        <div class="flight-card-top"><span class="flight-label">去程</span><span class="flight-date">10/07</span></div>
+        <div class="flight-main"><span class="flight-no">Z2133</span><span class="flight-airline">Philippines AirAsia</span></div>
+        <div class="flight-times">
+          <div class="flight-point"><small><strong>18:25</strong> KHH 高雄</small></div>
+          <div class="flight-point"><small><strong>20:15</strong> MNL 馬尼拉 · T1</small></div>
+        </div>
+      </div>
+      <div class="flight-card">
+        <div class="flight-card-top"><span class="flight-label">回程</span><span class="flight-date">10/11</span></div>
+        <div class="flight-main"><span class="flight-no">Z2132</span><span class="flight-airline">Philippines AirAsia</span></div>
+        <div class="flight-times">
+          <div class="flight-point"><small><strong>15:40</strong> MNL 馬尼拉 · T1</small></div>
+          <div class="flight-point"><small><strong>17:25</strong> KHH 高雄</small></div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-status"><span><strong>旅行準備中</strong></span><span>📅 10/07 出發</span></div>
+  </div>
 </header>
 <nav class="bottom-nav" aria-label="主要導覽">
 <a class="active" href="#home"><span class="nav-icon">⌂</span><b>首頁</b></a>
