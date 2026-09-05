@@ -52,6 +52,7 @@ footer{text-align:center;padding:30px 20px 45px;color:var(--muted);font-size:12p
 .stop-time{font-size:12px;font-weight:800;color:var(--orange)}
 .stop-title{font-weight:800;margin:2px 0}
 .stop-note{font-size:13px;color:var(--muted);line-height:1.5}
+.stop-map-btn{display:inline-block;margin-top:6px;padding:5px 9px;border-radius:8px;background:#f3ece5;color:#806c62;text-decoration:none;font-size:10px;font-weight:700;width:max-content}
 .day-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
 .day-actions button{border:0;border-radius:11px;padding:9px 11px;background:#eee8dc;color:var(--green);font-weight:700}
 .day-actions .primary{background:var(--green);color:white}
@@ -90,7 +91,7 @@ body{padding-bottom:82px}
 .hero-date{font-size:12px;margin:0 0 14px;opacity:.9}
 .flight-row{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .flight-card{background:#ffffff2b;border:1px solid #fff5;border-radius:13px;padding:10px;backdrop-filter:blur(8px)}
-.flight-card span{font-size:9px;display:block;opacity:.75}.flight-card b{display:block;font-size:15px}.flight-card small{font-size:9px;opacity:.8}.flight-airline{font-size:8px!important;line-height:1.2;margin:-1px 0 2px;opacity:.72!important}
+.flight-card span{font-size:9px;display:block;opacity:.75}.flight-card b{display:block;font-size:15px}.flight-card small{font-size:9px;opacity:.8}
 .hero-status{display:flex;justify-content:space-between;margin-top:9px;padding:9px 11px;border-radius:11px;background:#0005;border:1px solid #fff3;font-size:10px}
 #dashboard{padding-top:16px}
 .dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -396,13 +397,11 @@ body:not(.home-view) #dashboard{display:none}
         <div class="flight-card">
           <span class="flight-label">去程</span>
           <b class="flight-no">Z2133</b>
-          <span class="flight-airline">Philippines AirAsia</span>
           <small>18:25 高雄 KHH → 20:15 馬尼拉 MNL · T1</small>
         </div>
         <div class="flight-card">
           <span class="flight-label">回程</span>
           <b class="flight-no">Z2132</b>
-          <span class="flight-airline">Philippines AirAsia</span>
           <small>15:40 馬尼拉 MNL · T1 → 17:25 高雄 KHH</small>
         </div>
       </div>
@@ -589,6 +588,7 @@ let currentUser=null, syncReady=false, realtimeChannel=null, cloudSaveTimer=null
 let ignoreRealtimeUntil=0;
 
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function mapsUrl(title,note){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(String(title||"")+" "+String(note||"")+" Manila Philippines");}
 function save(){
  localStorage.setItem("manila2026_days_v2",JSON.stringify(days));
  localStorage.setItem("manila2026_active",active);
@@ -612,7 +612,7 @@ function render(){
  active=Math.max(0,Math.min(active,days.length-1));
  document.getElementById("dayTabs").innerHTML=days.map((d,i)=>`<button class="day-tab ${i===active?'active':''}" onclick="showDay(${i})">DAY ${String(i+1).padStart(2,'0')}</button>`).join("");
  const d=days[active];
- document.getElementById("activeDay").innerHTML=`<article class="mobile-day"><div class="big-date">${esc(d.date)}</div><h3 class="itin-title">${esc(d.title)}</h3><div class="timeline">${d.stops.map((s,i)=>`<div class="stop" draggable="true" ondragstart="dragStopStart(event,${i})" ondragover="event.preventDefault()" ondrop="dropStop(event,${i})"><div class="stop-time">${esc(s[0])}</div><div class="stop-title">${esc(s[1])}</div><div class="stop-note">${esc(s[2]||"")}</div><div class="stop-actions"><button onclick="editStop(${i})">✏️</button><button onclick="moveStop(${i},-1)">↑</button><button onclick="moveStop(${i},1)">↓</button><button onclick="deleteStop(${i})">🗑️</button><span>↕ 拖曳排序</span></div></div>`).join("")}</div><div class="day-actions"><button class="primary add-stop-main" onclick="addStop()">＋ 新增一個行程</button><button onclick="editDay()">✏️ 編輯本日</button><button onclick="moveDay(-1)">← 前一天</button><button onclick="moveDay(1)">下一天 →</button><button onclick="deleteDay()">🗑️ 刪除本日</button></div></article>`;
+ document.getElementById("activeDay").innerHTML=`<article class="mobile-day"><div class="big-date">${esc(d.date)}</div><h3 class="itin-title">${esc(d.title)}</h3><div class="timeline">${d.stops.map((s,i)=>`<div class="stop" draggable="true" ondragstart="dragStopStart(event,${i})" ondragover="event.preventDefault()" ondrop="dropStop(event,${i})"><div class="stop-time">${esc(s[0])}</div><div class="stop-title">${esc(s[1])}</div><div class="stop-note">${esc(s[2]||"")}</div><a class="stop-map-btn" target="_blank" rel="noopener" href="${mapsUrl(s[1],s[2])}">📍 Google Maps</a><div class="stop-actions"><button onclick="editStop(${i})">✏️</button><button onclick="moveStop(${i},-1)">↑</button><button onclick="moveStop(${i},1)">↓</button><button onclick="deleteStop(${i})">🗑️</button><span>↕ 拖曳排序</span></div></div>`).join("")}</div><div class="day-actions"><button class="primary add-stop-main" onclick="addStop()">＋ 新增一個行程</button><button onclick="editDay()">✏️ 編輯本日</button><button onclick="moveDay(-1)">← 前一天</button><button onclick="moveDay(1)">下一天 →</button><button onclick="deleteDay()">🗑️ 刪除本日</button></div></article>`;
 }
 function showDay(i){active=i;save();render();window.scrollTo({top:document.getElementById("page-itinerary").offsetTop-20,behavior:"smooth"});}
 function editDay(){
