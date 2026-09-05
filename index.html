@@ -377,6 +377,29 @@ body:not(.home-view) #dashboard{display:none}
  .flight-no{font-size:18px!important;margin-bottom:4px!important}
  .flight-card small{font-size:8px!important}
 }
+
+.budget-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.budget-top button{padding:8px 12px;border-radius:10px}
+.budget-form{display:grid;grid-template-columns:1fr 1.6fr .8fr .9fr auto;gap:8px;margin-top:14px}
+.budget-form input,.budget-form select{width:100%;box-sizing:border-box;padding:10px 11px;border:1px solid #e7ded6;border-radius:10px;background:#faf7f3;color:#554940;font:inherit}
+.budget-form button{white-space:nowrap}
+.budget-total{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.budget-total>div{background:#f7f1eb;border-radius:12px;padding:11px 12px}
+.budget-total small,.expense-row small{display:block;color:#9a8f87;font-size:10px}
+.budget-total b{display:block;margin-top:4px;font-size:18px}
+.budget-settle{margin-top:9px;padding:12px;border-radius:12px;background:#f1e4dc;color:#805e50;font-weight:700;text-align:center}
+.budget-list-title{margin:16px 0 8px;font-weight:700;font-size:13px}
+.expense-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:11px 0;border-top:1px solid #eee6df}
+.expense-row strong{font-size:14px}
+.expense-row button{width:28px;height:28px;padding:0;border-radius:50%;background:#f3ece5;color:#9a8f87}
+.budget-empty{padding:20px 0;text-align:center;color:#9a8f87;font-size:12px}
+@media(max-width:700px){
+ .budget-form{grid-template-columns:1fr 1fr}
+ .budget-form input:nth-child(2){grid-column:1/-1}
+ .budget-form button{grid-column:1/-1}
+ .budget-total{grid-template-columns:1fr 1fr}
+ .budget-total>div:first-child{grid-column:1/-1}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -756,9 +779,67 @@ document.querySelectorAll(".bottom-nav a").forEach((a,i)=>{
   a.dataset.page=names[i];
   a.addEventListener("click",e=>{e.preventDefault();showPage(names[i]);});
 });
+
+let budgetItems = JSON.parse(localStorage.getItem("manila2026_budget_v1") || "[]");
+
+function saveBudget(){ localStorage.setItem("manila2026_budget_v1", JSON.stringify(budgetItems)); }
+
+function addExpense(){
+  const date=document.getElementById("budgetDate").value || new Date().toISOString().slice(0,10);
+  const item=document.getElementById("budgetItem").value.trim();
+  const amount=Number(document.getElementById("budgetAmount").value);
+  const payer=document.getElementById("budgetPayer").value;
+  if(!item || !amount || amount<=0){ alert("請輸入支出項目與金額"); return; }
+  budgetItems.push({id:Date.now(),date,item,amount,payer});
+  saveBudget();
+  document.getElementById("budgetItem").value="";
+  document.getElementById("budgetAmount").value="";
+  renderBudget();
+}
+
+function deleteExpense(id){
+  budgetItems=budgetItems.filter(x=>x.id!==id);
+  saveBudget();
+  renderBudget();
+}
+
+function clearBudget(){
+  if(!budgetItems.length)return;
+  if(confirm("確定要清空全部旅費紀錄嗎？")){
+    budgetItems=[];
+    saveBudget();
+    renderBudget();
+  }
+}
+
+function renderBudget(){
+  const summary=document.getElementById("budgetSummary"), list=document.getElementById("budgetList");
+  if(!summary||!list)return;
+  const eva=budgetItems.filter(x=>x.payer==="Eva").reduce((s,x)=>s+x.amount,0);
+  const tina=budgetItems.filter(x=>x.payer==="Tina").reduce((s,x)=>s+x.amount,0);
+  const total=eva+tina, half=total/2, diff=eva-half;
+  let settlement = total===0 ? "目前還沒有支出" : Math.abs(diff)<0.01 ? "✨ 目前兩人剛好打平" : diff>0 ? `Tina 需補給 Eva ₱${Math.round(diff).toLocaleString()}` : `Eva 需補給 Tina ₱${Math.round(-diff).toLocaleString()}`;
+  summary.innerHTML=`<div class="budget-total"><div><small>總旅費</small><b>₱${Math.round(total).toLocaleString()}</b></div><div><small>Eva 已付</small><b>₱${Math.round(eva).toLocaleString()}</b></div><div><small>Tina 已付</small><b>₱${Math.round(tina).toLocaleString()}</b></div></div><div class="budget-settle">${settlement}</div>`;
+  list.innerHTML=budgetItems.length?`<div class="budget-list-title">支出明細</div>`+budgetItems.slice().reverse().map(x=>`<div class="expense-row"><div><b>${esc(x.item)}</b><small>${esc(x.date)} · ${esc(x.payer)} 付款</small></div><strong>₱${Math.round(x.amount).toLocaleString()}</strong><button onclick="deleteExpense(${x.id})">×</button></div>`).join(""):`<div class="budget-empty">還沒有記帳，先新增第一筆支出吧 ☺️</div>`;
+}
+
 function showTool(type){
   const box=document.getElementById("toolContent");
-  if(type==="budget") box.innerHTML='<div class="page-card"><h3>💰 雙人記帳</h3><p>之後可以在這裡輸入 Eva 與 Tina 各自付款的金額，自動計算最後誰補給誰。</p></div>';
+  if(type==="budget"){
+ box.innerHTML=`<div class="page-card budget-card">
+   <div class="budget-top"><div><div class="page-label">TRIP EXPENSES</div><h3>💰 雙人旅費記帳</h3><p>共同支出平均分攤，直接算出最後誰要補給誰。</p></div><button onclick="clearBudget()">清空</button></div>
+   <div class="budget-form">
+     <input id="budgetDate" type="date" value="${new Date().toISOString().slice(0,10)}">
+     <input id="budgetItem" placeholder="支出項目，例如：晚餐、Grab、按摩">
+     <input id="budgetAmount" type="number" min="0" step="1" placeholder="金額 ₱">
+     <select id="budgetPayer"><option value="Eva">Eva 付款</option><option value="Tina">Tina 付款</option></select>
+     <button class="primary" onclick="addExpense()">＋ 新增支出</button>
+   </div>
+   <div id="budgetSummary"></div>
+   <div id="budgetList"></div>
+ </div>`;
+ renderBudget();
+}
   if(type==="prep") box.innerHTML='<div class="page-card"><h3>🧳 行前清單</h3><div class="todo">☐ 護照</div><div class="todo">☐ 機票</div><div class="todo">☐ eSIM</div><div class="todo">☐ Grab</div><div class="todo">☐ 旅平險</div></div>';
   if(type==="hotel") box.innerHTML='<div class="page-card"><h3>🏨 城市花園大酒店</h3><p>8008 Makati Ave, Kalayaan Ave, Makati, Philippines</p><a class="mapbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=City+Garden+Grand+Hotel+Makati">📍 開啟地圖</a></div>';
   if(type==="food") box.innerHTML='<div class="page-card"><h3>🍴 美食清單</h3><p>之後把選定的餐廳、必點料理與 Google Maps 放進這裡。</p></div>';
