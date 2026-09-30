@@ -503,7 +503,7 @@ body:not(.home-view) #dashboard{display:none}
   <div class="page-card">
     <div class="page-label">NEXT TRIP</div>
     <h3>📌 10/07｜抵達馬尼拉</h3>
-    <p>抵達機場 → 前往城市花園大酒店 → 放行李 → Poblacion 晚餐</p>
+    <p>高雄 → 馬尼拉 T1 → Grab → City Garden Grand Hotel → 附近簡單吃</p>
   </div>
   <div class="page-card">
     <div class="page-label">出發前提醒</div>
@@ -523,10 +523,13 @@ body:not(.home-view) #dashboard{display:none}
 <section class="app-page" id="page-map">
   <div class="page-title"><span>地圖</span><h2>旅行地圖</h2><p>常用地點一點就能導航</p></div>
   <div class="map-list">
-    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=City+Garden+Grand+Hotel+Makati"><b>🏨 城市花園大酒店</b><small>住宿</small><span>→</span></a>
-    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Intramuros+Manila"><b>🏛️ 王城區 Intramuros</b><small>第2天</small><span>→</span></a>
-    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Bonifacio+High+Street+Taguig"><b>🛍️ BGC High Street</b><small>第3天</small><span>→</span></a>
-    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=SM+Mall+of+Asia"><b>🌴 SM Mall of Asia</b><small>第4天備選</small><span>→</span></a>
+    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=City+Garden+Grand+Hotel+Makati"><b>🏨 City Garden Grand Hotel</b><small>住宿</small><span>→</span></a>
+    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Balay+Dako+Tagaytay"><b>🍽️ Balay Dako</b><small>DAY 2｜Tagaytay</small><span>→</span></a>
+    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Intramuros+Manila"><b>⛪ Intramuros</b><small>DAY 3｜王城區</small><span>→</span></a>
+    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=SM+Mall+of+Asia"><b>🛍️ SM Mall of Asia</b><small>DAY 3</small><span>→</span></a>
+    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Greenbelt+Makati"><b>🛍️ Greenbelt</b><small>DAY 4｜Makati</small><span>→</span></a>
+    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Firefly+Rooftop+Bar+Makati"><b>🌃 Firefly Roofdeck</b><small>DAY 4｜最後一晚</small><span>→</span></a>
+    <a class="map-item" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Legazpi+Sunday+Market+Makati"><b>🌿 Legazpi Sunday Market</b><small>DAY 5</small><span>→</span></a>
   </div>
 </section>
 
@@ -589,18 +592,51 @@ const SUPABASE_URL = "https://hmldhemrlegizgbsfmvy.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_67RdvpfFfVuU2GEZ_CKTEw_5391deGd";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
+const ITINERARY_VERSION = "2026-09-30-v2";
 const DEFAULT_DAYS = [
-{date:"第1天 · 10/07 週三",title:"✈️ 抵達馬尼拉｜馬卡蒂夜晚",stops:[
-["抵達","馬尼拉機場 → Grab → 城市花園大酒店","先入住、放行李"],
-["晚上","Poblacion","晚餐＋附近散步"]]},
-{date:"第2天 · 10/08 週四",title:"🏛️ 老城散步｜歷史 × 美食",stops:[
-["09:00","前往 王城區 Intramuros","Grab"],["09:30","王城區 Intramuros → 馬尼拉大教堂 → 聖地牙哥堡","歷史街區＋拍照"],["12:30","午餐","找附近菲律賓料理"],["14:00","聖奧古斯丁教堂","歷史教堂"],["15:30","黎剎公園 → 國家博物館","文化行程"],["18:00","岷倫洛 Chinatown","晚餐＋夜逛"]]},
-{date:"第3天 · 10/09 週五",title:"🛍️ 馬卡蒂 × BGC｜逛街日",stops:[
-["10:00","Greenbelt","早餐／逛街"],["11:30","Ayala Museum","文化＋室內行程"],["14:00","BGC High Street","街景＋拍照"],["15:00","咖啡時間","找間喜歡的 Cafe"],["17:00","SM Aura","購物"],["19:00","BGC","晚餐"]]},
-{date:"第4天 · 10/10 週六",title:"🌴 放鬆自由日｜自由安排",stops:[
-["上午","自由選擇","A｜SM Mall of Asia　B｜Makati　C｜睡晚一點"],["下午","按摩／咖啡／購物","看兩人體力決定"],["晚上","最後一晚大餐","好好吃一頓"]]},
-{date:"第5天 · 10/11 週日",title:"✈️ 再見馬尼拉",stops:[
-["早餐","飯店附近","最後一杯咖啡"],["退房","城市花園大酒店","確認護照、手機、行李"],["前往機場","Grab → 馬尼拉機場","預留塞車時間"],["✈️","Z2132","回台灣"]]}
+{date:"第1天 · 10/07 週三",title:"🇹🇼 高雄 → 馬尼拉｜入住＋附近吃東西",stops:[
+["18:25","✈️ 高雄機場 → 馬尼拉","Z2133｜KHH → MNL｜Terminal 1"],
+["20:15","🇵🇭 抵達馬尼拉 Terminal 1","入境、領行李、換一點菲幣／確認網路"],
+["約21:30～22:30","🏨 City Garden Grand Hotel Makati","Grab 前往飯店｜Check-in、放行李、洗澡休息"],
+["晚上","🍜 飯店附近簡單吃","Jollibee 或外帶回飯店｜第一天只求平安抵達＋睡飽"]]},
+{date:"第2天 · 10/08 週四",title:"🌋 Tagaytay 一日遊｜包車＋司機",stops:[
+["07:00","🚗 City Garden Grand Hotel → Tagaytay","Klook 10小時包車＋司機｜Standard Sedan｜All In"],
+["約09:00～09:30","☕ 抵達 Tagaytay","開始景點行程"],
+["10:00～11:30","🍽️ Balay Dako","早午餐｜菲式料理，兩人分著吃"],
+["11:45～13:00","🌋 Taal Lake 景觀","只看湖景、不搭船｜拍拍照、吹吹風"],
+["13:00～14:30","☕ Tagaytay 景觀咖啡廳","咖啡、甜點、拍照、聊天、發呆"],
+["14:30～15:30","🌿 People's Park in the Sky／Tagaytay Picnic Grove","二選一｜看天氣與體力決定"],
+["15:30～16:00","🚗 返回 Makati","包車返回飯店"],
+["約18:00～19:00","🏨 回到飯店","洗澡、休息"],
+["晚上","🌃 Antidote Rooftop Bar／飯店休息","有體力再去｜累了就直接休息"]]},
+{date:"第3天 · 10/09 週五",title:"⛪ Intramuros＋MOA｜歷史 × 購物 × 美食",stops:[
+["07:30～08:15","☕ Kanto Freestyle Breakfast","Longganisa、Tocino、Garlic Rice、Fried Egg"],
+["09:00","🚗 飯店 → Intramuros","Grab"],
+["09:30～10:15","⛪ Manila Cathedral","馬尼拉大教堂"],
+["10:20～11:10","⛪ San Agustin Church","聖奧古斯丁教堂"],
+["11:10～12:00","🚶 Intramuros 老城區散步","西班牙殖民建築、老街、Casa Manila 周邊｜不去 Fort Santiago"],
+["12:00～13:30","🍽️ Barbara's Heritage Restaurant","À la carte｜不吃 Buffet、不看文化表演"],
+["14:00","🚗 前往 Mall of Asia","Grab"],
+["14:00～18:00","🛍️ SM Mall of Asia","購物、超市、美妝、小物、拍照"],
+["18:00～19:30","🍽️ Manam｜SM Mall of Asia","Sisig、Sinigang、Adobo／Crispy Pork、Rice｜3～4道分食"],
+["20:00後","💆‍♀️ 回飯店／按摩","腳痠就回飯店｜想按摩再安排"]]},
+{date:"第4天 · 10/10 週六",title:"🛍️ Makati Shopping＋按摩＋最後夜景",stops:[
+["08:00～09:00","☕ Panco Cafe","早餐／早午餐＋咖啡"],
+["09:30～15:00","🛍️ Greenbelt ＋ Ayala","逛街、買東西、咖啡、拍照｜依興趣慢慢逛"],
+["15:30～17:00","💆‍♀️ Breeze Oriental Spa & Massage - Makati","首選｜90分鐘按摩"],
+["備選","💆‍♀️ Payapa Wellness & Spa - Makati","若首選價格／預約不方便，改這間"],
+["17:00～18:30","🏨 回飯店休息","洗澡、換漂亮衣服、休息"],
+["18:30～21:30","🌇 Firefly Roofdeck｜City Garden Grand Hotel 32F","馬尼拉最後一晚｜夕陽、晚餐、喝一杯、看 Makati 夜景"]]},
+{date:"第5天 · 10/11 週日",title:"🌿 Legazpi Sunday Market → 機場",stops:[
+["07:00","🌅 起床","整理最後行李"],
+["07:30","🚗 前往 Legazpi Sunday Market","Grab"],
+["08:00～09:30","🌿 Legazpi Sunday Market","菲式早餐、小吃、咖啡、甜點、伴手禮"],
+["10:00","🏨 回飯店","整理行李"],
+["10:30","🧳 Check-out","確認護照、手機、行李"],
+["11:00","🚗 Grab → Manila Airport Terminal 1","國際航班，預留塞車時間"],
+["約12:00～12:30","✈️ 抵達機場","Terminal 1｜辦理登機"],
+["15:40","✈️ Z2132 MNL → KHH","15:40 → 17:25｜Terminal 1"],
+["17:25","🇹🇼 抵達高雄","旅程結束 🤍"]]}
 ];
 
 let days=JSON.parse(localStorage.getItem("manila2026_days_v2")||"null")||DEFAULT_DAYS.map(d=>JSON.parse(JSON.stringify(d)));
@@ -663,7 +699,18 @@ async function loadCloud(){
  if(error){setSyncUI("同步失敗","讀取失敗："+error.message);return;}
  if(!data.length){await seedCloud();}
  else {days=data.map(r=>({id:r.id,date:r.date_label,title:r.title,stops:r.stops||[]}));active=Math.min(active,Math.max(0,days.length-1));localStorage.setItem("manila2026_days_v2",JSON.stringify(days));localStorage.setItem("manila2026_active",active);}
- syncReady=true;setSyncUI("🟢 已同步",displayUser()+" · 雲端行程已更新");render();subscribeRealtime();
+ syncReady=true;
+ const migrated=localStorage.getItem("manila2026_itinerary_version")!==ITINERARY_VERSION;
+ if(migrated){
+   const oldDays=days.slice();
+   days=DEFAULT_DAYS.map((d,i)=>({id:oldDays[i]?.id,...JSON.parse(JSON.stringify(d))}));
+   active=0;
+   localStorage.setItem("manila2026_days_v2",JSON.stringify(days));
+   localStorage.setItem("manila2026_active",active);
+   const ok=await saveCloud();
+   if(ok) localStorage.setItem("manila2026_itinerary_version",ITINERARY_VERSION);
+ }
+ setSyncUI("🟢 已同步",displayUser()+" · 雲端行程已更新");render();subscribeRealtime();
 }
 function queueCloudSave(){clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(saveCloud,350);}
 async function saveCloud(){
@@ -672,11 +719,12 @@ async function saveCloud(){
  const rows=days.map((d,i)=>({id:d.id||undefined,day_number:i+1,date_label:d.date,title:d.title,stops:d.stops,sort_order:i+1,updated_by:displayUser(),updated_at:new Date().toISOString()}));
  if(deletedCloudIds.length){await supabaseClient.from("trip_days").delete().in("id",deletedCloudIds);deletedCloudIds=[];}
  const {data,error}=await supabaseClient.from("trip_days").upsert(rows,{onConflict:"id"}).select();
- if(error){setSyncUI("⚠️ 尚未同步",error.message);return;}
+ if(error){setSyncUI("⚠️ 尚未同步",error.message);return false;}
  days=data.sort((a,b)=>a.sort_order-b.sort_order).map(r=>({id:r.id,date:r.date_label,title:r.title,stops:r.stops||[]}));
  localStorage.setItem("manila2026_days_v2",JSON.stringify(days));
  setSyncUI("🟢 已同步",displayUser()+" · 最後更新："+new Date().toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit"}));
  render();
+ return true;
 }
 function subscribeRealtime(){
  if(realtimeChannel) supabaseClient.removeChannel(realtimeChannel);
