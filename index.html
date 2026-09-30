@@ -239,7 +239,7 @@ body:not(.home-view) #dashboard{display:none}
 .page-title{padding:8px 4px 14px}.page-title span{font-size:9px;letter-spacing:2px;color:#b56f5a;font-weight:800}.page-title h2{font-size:27px;margin:5px 0 3px;color:#4b4540}.page-title p{font-size:11px;color:#9a8f87;margin:0}
 .page-card{background:#fffdfa;border-radius:18px;padding:16px;margin:10px 0;box-shadow:0 5px 20px #4b392d0d}.page-label{font-size:9px;letter-spacing:1.6px;color:#b56f5a;font-weight:800}.page-card h3{margin:6px 0 8px}.page-card p{font-size:13px;line-height:1.7;color:#756b65}.todo{padding:11px 0;border-bottom:1px solid #eee6de;font-size:13px;color:#675f59}
 .map-list{display:grid;gap:10px}.map-item{display:grid;grid-template-columns:1fr auto;gap:2px 8px;text-decoration:none;color:#4b4540;background:#fffdfa;border-radius:15px;padding:15px;box-shadow:0 4px 15px #4b392d0b}.map-item b{grid-column:1}.map-item small{color:#9a8f87}.map-item span{grid-column:2;grid-row:1/3;align-self:center;color:#b56f5a;font-size:20px}
-.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tool-grid button{border:0;text-align:left;background:#fffdfa;border-radius:16px;padding:16px;color:#4b4540;box-shadow:0 4px 15px #4b392d0b}.tool-grid b,.tool-grid small{display:block;margin-top:5px}.tool-grid small{color:#9a8f87;font-size:10px}.more-row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid #eee6de;font-size:13px}.more-row span{color:#8e8178}
+.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tool-grid button{border:0;text-align:left;background:#fffdfa;border-radius:16px;padding:16px;color:#4b4540;box-shadow:0 4px 15px #4b392d0b}.tool-grid b,.tool-grid small{display:block;margin-top:5px}.tool-grid small{color:#9a8f87;font-size:10px}.money-place{margin-top:10px;padding:13px;border:1px solid #eee4da;border-radius:14px;background:#fffdfa}.money-place b,.money-place small{display:block}.money-place small{margin-top:5px;color:#8e8178;line-height:1.5}.money-place .mapbtn{display:inline-block;margin-top:8px}.money-tip{margin-top:12px;padding:12px;border-radius:12px;background:#f7eee7;color:#6e625b;font-size:12px;line-height:1.6}.more-row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid #eee6de;font-size:13px}.more-row span{color:#8e8178}
 
 .stop-actions{display:flex;align-items:center;gap:5px;margin-top:7px}
 .stop-actions button{border:0;background:#f3ece5;color:#806c62;border-radius:8px;width:28px;height:27px;font-size:12px}
@@ -540,6 +540,7 @@ body:not(.home-view) #dashboard{display:none}
     <button onclick="showTool('prep')">🧳<b>行前清單</b><small>出發前逐項確認</small></button>
     <button onclick="showTool('hotel')">🏨<b>住宿資訊</b><small>地址與地圖</small></button>
     <button onclick="showTool('food')">🍴<b>美食清單</b><small>之後慢慢加入</small></button>
+    <button onclick="showTool('money')">💱<b>換菲幣</b><small>機場＋Makati 換匯地點</small></button>
   </div>
   <div id="toolContent"></div>
 </section>
@@ -592,11 +593,11 @@ const SUPABASE_URL = "https://hmldhemrlegizgbsfmvy.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_67RdvpfFfVuU2GEZ_CKTEw_5391deGd";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-const ITINERARY_VERSION = "2026-09-30-v3";
+const ITINERARY_VERSION = "2026-09-30-v5";
 const DEFAULT_DAYS = [
 {date:"第1天 · 10/07 週三",title:"🇹🇼 高雄 → 馬尼拉｜入住＋附近吃東西",stops:[
 ["18:25","✈️ 高雄機場 → 馬尼拉","Z2133｜KHH → MNL｜Terminal 1"],
-["20:15","🇵🇭 抵達馬尼拉 Terminal 1","入境、領行李、換一點菲幣／確認網路"],
+["20:15","🇵🇭 抵達馬尼拉 Terminal 1","入境、領行李、先換 US$80～100 左右的菲幣，給隔天 Tagaytay 一日遊＋第一晚交通餐費使用／確認網路｜T1 2F 抵達大廳有 Carrens Forex、Elcka Forex，皆為 24 小時"],
 ["約21:30～22:30","🏨 City Garden Grand Hotel Makati","City Garden Grand Hotel Makati（馬卡蒂城市花園格蘭德酒店）｜Grab 前往飯店｜Check-in、放行李、洗澡休息"],
 ["晚上","🍜 飯店附近簡單吃","Jollibee 或外帶回飯店｜第一天只求平安抵達＋睡飽"]]},
 {date:"第2天 · 10/08 週四",title:"🌋 Tagaytay 一日遊｜包車＋司機",stops:[
@@ -891,6 +892,16 @@ function showTool(type){
   if(type==="prep") box.innerHTML='<div class="page-card"><h3>🧳 行前清單</h3><div class="todo">☐ 護照</div><div class="todo">☐ 機票</div><div class="todo">☐ eSIM</div><div class="todo">☐ Grab</div><div class="todo">☐ 旅平險</div></div>';
   if(type==="hotel") box.innerHTML='<div class="page-card"><h3>🏨 城市花園大酒店</h3><p>8008 Makati Ave, Kalayaan Ave, Makati, Philippines</p><a class="mapbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=City+Garden+Grand+Hotel+Makati">📍 開啟地圖</a></div>';
   if(type==="food") box.innerHTML='<div class="page-card"><h3>🍴 美食清單</h3><p>之後把選定的餐廳、必點料理與 Google Maps 放進這裡。</p></div>';
+  if(type==="money") box.innerHTML=`<div class="page-card money-card">
+   <div class="page-label">CURRENCY EXCHANGE</div>
+   <h3>💱 換菲幣攻略</h3>
+   <p>建議第一晚先換 US$80～100 左右的 PHP，因為隔天要去 Tagaytay 一日遊；剩下外幣留到 Makati 再比較匯率。匯率與營業時間以現場／官方最新資訊為準。</p>
+   <div class="money-place"><b>🇵🇭 DAY 1｜NAIA Terminal 1</b><small>Carrens Forex｜T1 2F East Side Arrival Lobby｜24 小時</small><a class="mapbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Carrens+Forex+NAIA+Terminal+1">📍 Google Maps</a></div>
+   <div class="money-place"><b>🇵🇭 DAY 1｜NAIA Terminal 1</b><small>Elcka Forex｜T1 2F West Side Arrival Lobby｜24 小時</small><a class="mapbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Elcka+Forex+NAIA+Terminal+1">📍 Google Maps</a></div>
+   <div class="money-place"><b>🏙️ DAY 4｜Makati</b><small>Czarina Forex｜Glorietta 4 B2｜週一至週日 11:00～19:00</small><a class="mapbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Czarina+Forex+Glorietta+4+Makati">📍 Google Maps</a></div>
+   <div class="money-place"><b>🛍️ DAY 4｜Greenbelt</b><small>Sanry’s Foreign Currency Exchange｜Greenbelt 1 Ground Floor</small><a class="mapbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Sanrys+Foreign+Currency+Exchange+Greenbelt+1+Makati">📍 Google Maps</a></div>
+   <div class="money-tip">💡 換匯建議：如果你們帶 US$200，第一晚可先換 US$80～100。這筆涵蓋 Grab、第一晚餐費，以及隔天 Tagaytay 的現金支出；剩下 US$100～120 留到 Makati／Greenbelt 再比較匯率，不用一次全部換完。</div>
+ </div>`;
 }
 </script>
 
